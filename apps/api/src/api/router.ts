@@ -13,4 +13,5 @@ const router = new Hono()
 
 export default router;
 
-export type AppType = typeof router;
+export type AppRouter = typeof router;
+

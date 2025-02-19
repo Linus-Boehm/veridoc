@@ -1,5 +1,5 @@
 {
-  "name": "api",
+  "name": "@apps/api",
   "private": true,
   "scripts": {
     "dev": "concurrently \"pnpm:next\" \"pnpm:stripe\"",
@@ -20,22 +20,22 @@
     "@repo/next-config": "workspace:*",
     "@repo/observability": "workspace:*",
     "@repo/testing": "workspace:*",
-    "@sentry/nextjs": "^8.54.0",
-    "@t3-oss/env-nextjs": "^0.12.0",
-    "hono": "^4.7.1",
-    "next": "15.1.6",
-    "react": "19.0.0",
-    "react-dom": "19.0.0",
-    "svix": "^1.45.1",
-    "vitest": "^3.0.5",
-    "zod": "^3.24.1"
+    "@sentry/nextjs": "catalog:",
+    "@t3-oss/env-nextjs": "catalog:",
+    "hono": "catalog:",
+    "next": "catalog:",
+    "react": "catalog:",
+    "react-dom": "catalog:",
+    "svix": "catalog:",
+    "vitest": "catalog:",
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "22.13.1",
-    "@types/react": "19.0.8",
-    "@types/react-dom": "19.0.3",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "concurrently": "^9.1.2",
-    "typescript": "^5.7.3"
+    "typescript": "catalog:"
   }
 }

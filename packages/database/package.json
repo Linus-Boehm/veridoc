@@ -18,14 +18,14 @@
     "server-only": "^0.0.1",
     "undici": "^7.3.0",
     "ws": "^8.18.0",
-    "zod": "^3.24.1"
+    "zod": "catalog:"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "@types/node": "22.13.1",
+    "@types/node": "catalog:",
     "@types/ws": "^8.5.14",
     "bufferutil": "^4.0.9",
     "drizzle-kit": "^0.30.4",
-    "typescript": "^5.7.3"
+    "typescript": "catalog:"
   }
 }
