@@ -1,13 +1,15 @@
-"use client";
+'use client';
 
-import { ApiClient } from "@/services/ApiClient";
-import { useEffect } from "react";
-import type { FC } from "react";
+import { ApiClient } from '@/services/ApiClient';
+import { useEffect } from 'react';
+import type { FC } from 'react';
 
 export const ApiTest: FC = () => {
   useEffect(() => {
     ApiClient.monitoring.health.$get().then((res) => {
-      console.log(res);
+      res.json().then((res) => {
+        console.log(res);
+      });
     });
   }, []);
   return <div>ApiTest</div>;

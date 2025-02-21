@@ -17,6 +17,7 @@ export const NotificationsProvider = ({
   userId,
 }: NotificationsProviderProps) => {
   if (!knockApiKey || !knockFeedChannelId) {
+    console.error('Knock API key or feed channel ID is not set');
     return children;
   }
 
