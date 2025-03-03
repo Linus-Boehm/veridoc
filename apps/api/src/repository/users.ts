@@ -27,6 +27,8 @@ export const upsertUser = async (data: UserJSON) => {
   const updateData = {
     clerkId: data.id,
     email: primaryEmail.email_address,
+    firstName: data.first_name,
+    lastName: data.last_name,
   };
 
   await database

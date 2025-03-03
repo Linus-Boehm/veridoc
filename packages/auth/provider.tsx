@@ -6,6 +6,7 @@ import type { Theme } from '@clerk/types';
 import { tailwind } from '@repo/tailwind-config';
 import { useTheme } from 'next-themes';
 import type { ComponentProps } from 'react';
+import { keys } from './keys';
 
 export const AuthProvider = (
   properties: ComponentProps<typeof ClerkProvider>
@@ -39,6 +40,7 @@ export const AuthProvider = (
 
   return (
     <ClerkProvider
+      publishableKey={keys().NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY} sec
       {...properties}
       appearance={{ baseTheme, variables, elements }}
     />

@@ -1,6 +1,6 @@
 'use client';
 
-import { ApiClient } from '@/services/ApiClient';
+import { ApiClient } from '../../services/ApiClient';
 import { useEffect } from 'react';
 import type { FC } from 'react';
 

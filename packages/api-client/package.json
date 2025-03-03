@@ -15,10 +15,13 @@
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
     "tsup": "^8.0.0",
-    "typescript": "^5.0.0"
+    "typescript": "catalog:"
   },
   "dependencies": {
     "@apps/api": "workspace:*",
-    "hono": "catalog:"
+    "hono": "catalog:",
+    "zod": "catalog:",
+    "@hono/zod-validator": "catalog:",
+    "@taxel/domain": "workspace:*"
   }
 }

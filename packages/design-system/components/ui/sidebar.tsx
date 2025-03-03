@@ -3,19 +3,19 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { VariantProps, cva } from "class-variance-authority"
-import { useIsMobile } from "@repo/design-system/hooks/use-mobile"
-import { cn } from "@repo/design-system/lib/utils"
-import { Button } from "@repo/design-system/components/ui/button"
-import { Input } from "@repo/design-system/components/ui/input"
-import { Separator } from "@repo/design-system/components/ui/separator"
-import { Sheet, SheetContent, SheetTitle } from "@repo/design-system/components/ui/sheet"
-import { Skeleton } from "@repo/design-system/components/ui/skeleton"
+import { useIsMobile } from "#hooks/use-mobile.tsx"
+import { cn } from "#lib/utils.ts"
+import { Button } from "#components/ui/button.tsx"
+import { Input } from "#components/ui/input.tsx"
+import { Separator } from "#components/ui/separator.tsx"
+import { Sheet, SheetContent, SheetTitle } from "#components/ui/sheet.tsx"
+import { Skeleton } from "#components/ui/skeleton.tsx"
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
-} from "@repo/design-system/components/ui/tooltip"
+} from "#components/ui/tooltip.tsx"
 import { ViewVerticalIcon } from "@radix-ui/react-icons"
 
 const SIDEBAR_COOKIE_NAME = "sidebar:state"

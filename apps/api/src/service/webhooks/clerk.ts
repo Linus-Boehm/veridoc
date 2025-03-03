@@ -7,8 +7,8 @@ import type {
   OrganizationMembershipJSON,
   UserJSON,
 } from '@repo/auth/server';
-import { removeUser, upsertUser } from '@/src/repository/users';
-import { removeOrganization, removeOrganizationMembership, upsertOrganization, upsertOrganizationMembership } from '@/src/repository/organization';
+import { removeUser, upsertUser } from '../../repository/users';
+import { removeOrganization, removeOrganizationMembership, upsertOrganization, upsertOrganizationMembership } from '../../repository/organization';
 
 export const handleUserCreated: WebhookResponseHandler<UserJSON> = async (
   data
@@ -31,6 +31,9 @@ export const handleUserCreated: WebhookResponseHandler<UserJSON> = async (
   });
 
   await upsertUser(data);
+  if (data.organization_memberships){
+    await upsertOrganizationMembership(data.organization_memberships);
+  } 
 
   return DEFAULT_WEBHOOK_RESPONSE;
 };
@@ -157,7 +160,7 @@ export const handleOrganizationMembershipCreated: WebhookResponseHandler<
     distinctId: data.public_user_data.user_id,
   });
 
-  await upsertOrganizationMembership(data);
+  await upsertOrganizationMembership([data]);
 
   return DEFAULT_WEBHOOK_RESPONSE;
 };

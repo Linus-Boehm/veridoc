@@ -2,16 +2,18 @@
   "name": "@apps/api",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"pnpm:next\"",
+    "dev": "concurrently \"pnpm:next\" \"pnpm:forward\"",
     "next": "next dev -p 3002 --turbopack",
     "build": "next build",
     "start": "next start",
     "analyze": "ANALYZE=true pnpm build",
     "test": "NODE_ENV=test vitest run",
     "clean": "git clean -xdf .cache .turbo dist node_modules",
-    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false",
+    "forward": "ngrok http --url=chimp-romantic-doberman.ngrok-free.app 3002"
   },
   "dependencies": {
+    "@hono/zod-validator": "catalog:",
     "@repo/analytics": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/database": "workspace:*",
@@ -19,6 +21,10 @@
     "@repo/next-config": "workspace:*",
     "@repo/observability": "workspace:*",
     "@repo/testing": "workspace:*",
+    "@repo/storage": "workspace:*",
+    "@repo/ai": "workspace:*",
+    "@repo/email": "workspace:*",
+    "@taxel/domain": "workspace:*",
     "@sentry/nextjs": "catalog:",
     "@t3-oss/env-nextjs": "catalog:",
     "hono": "catalog:",
@@ -26,6 +32,7 @@
     "react": "catalog:",
     "react-dom": "catalog:",
     "svix": "catalog:",
+    "uuid": "^11.1.0",
     "vitest": "catalog:",
     "zod": "catalog:"
   },
@@ -36,5 +43,8 @@
     "@types/react-dom": "catalog:",
     "concurrently": "^9.1.2",
     "typescript": "catalog:"
+  },
+  "imports": {
+    "#*": "./*"
   }
 }

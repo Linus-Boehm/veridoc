@@ -9,10 +9,7 @@
     "allowJs": true,
     "jsx": "preserve",
     "noEmit": true,
-    "paths": {
-      "@/*": ["./*"],
-      "@repo/*": ["../../packages/*"]
-    }
+    "allowImportingTsExtensions": true
   },
   "exclude": ["node_modules"]
 }

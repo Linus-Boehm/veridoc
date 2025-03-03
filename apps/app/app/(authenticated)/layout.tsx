@@ -1,4 +1,4 @@
-import { env } from '@/env';
+import { env } from '../../env';
 import { auth, currentUser } from '@repo/auth/server';
 import { SidebarProvider } from '@repo/design-system/components/ui/sidebar';
 import { showBetaFeature } from '@repo/feature-flags';

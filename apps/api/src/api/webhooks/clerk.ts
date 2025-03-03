@@ -8,15 +8,15 @@ import {
   handleUserCreated,
   handleUserDeleted,
   handleUserUpdated,
-} from '@/src/service/webhooks/clerk';
-import type { WebhookResponse } from '@/src/service/webhooks/types';
-import { DEFAULT_WEBHOOK_RESPONSE } from '@/src/service/webhooks/utils';
+} from '../../service/webhooks/clerk';
+import type { WebhookResponse } from '../../service/webhooks/types';
+import { DEFAULT_WEBHOOK_RESPONSE } from '../../service/webhooks/utils';
 import { analytics } from '@repo/analytics/posthog/server';
 import type { WebhookEvent } from '@repo/auth/server';
 import { log } from '@repo/observability/log';
 import { Hono } from 'hono';
 import { Webhook } from 'svix';
-import { env } from '@/env';
+import { env } from '../../../env';
 
 const app = new Hono().post('/', async (c) => {
   if (!env.CLERK_WEBHOOK_SECRET) {

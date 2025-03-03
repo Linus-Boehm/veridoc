@@ -1,5 +1,5 @@
 import { handle } from 'hono/vercel';
-import router from '@/src/api/router';
+import router from '../../src/api/router';
 
 export const dynamic = 'force-dynamic';
 

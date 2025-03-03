@@ -9,6 +9,7 @@
   "dependencies": {
     "@clerk/nextjs": "^6.11.1",
     "@clerk/themes": "^2.2.16",
+    "@hono/clerk-auth": "^2.0.0",
     "@repo/tailwind-config": "workspace:*",
     "@t3-oss/env-nextjs": "^0.12.0",
     "next-themes": "^0.4.4",

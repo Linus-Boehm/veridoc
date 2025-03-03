@@ -8,7 +8,8 @@
     "typecheck": "tsc --noEmit --emitDeclarationOnly false",
     "db:migrate": "npx drizzle-kit migrate",
     "db:generate": " npx drizzle-kit generate",
-    "db:pull": " npx drizzle-kit pull"
+    "db:pull": " npx drizzle-kit pull",
+    "db:studio": "npx drizzle-kit studio --port 3005"
   },
   "dependencies": {
     "@neondatabase/serverless": "^0.10.4",
@@ -16,6 +17,7 @@
     "drizzle-orm": "^0.39.3",
     "server-only": "^0.0.1",
     "undici": "^7.3.0",
+    "uuid": "^11.1.0",
     "ws": "^8.18.0",
     "zod": "catalog:"
   },
