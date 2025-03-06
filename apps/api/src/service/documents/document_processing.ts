@@ -1,5 +1,6 @@
+import { InvoiceService } from '#src/service/invoices/invoice.ts';
 import type { AppContext } from '../../domain/context';
-import { createNewDocumentExtraction, getDocumentByStorageKey, updateDocumentProcessingStatus } from '../../repository/document';
+import { DocumentRepository } from '../../repository/document';
 import { extractDocumentFromUrl } from '@repo/ai/lib/extraction';
 import { getSignedGetUrl } from '@repo/storage/server';
 
@@ -9,24 +10,30 @@ const getFileNameFromKey = (key: string) => {
 
 export const onDocumentUploaded = async (ctx: AppContext, key: string) => {
   const url = await getSignedGetUrl(key);
-  const document = await getDocumentByStorageKey(key, ctx.organization.id);
+  const repo = new DocumentRepository();
+  const document = await repo.findByStoragePath(key, ctx.organization.id);
 
   if (!document) {
     throw new Error('Document not found');
   }
   try {
-  const updatePromise = updateDocumentProcessingStatus(document.id, 'processing');
+  const updatePromise = repo.updateProcessingStatus(document.id, 'processing');
   const extracted = await extractDocumentFromUrl(url, ctx.organization.id, document.id);
-  const documentExtractionPromise = createNewDocumentExtraction(
-    ctx.organization.id,
-    document.id,
-    extracted || {}
-  );
+  const documentExtractionPromise = repo.createExtraction({
+    organizationId: ctx.organization.id,
+    documentId: document.id,
+    extractionResult: extracted || {},
+  });
+
+  const invoiceService = new InvoiceService();
+
+  const invoicesPromises = extracted.invoices.map(data => invoiceService.create(ctx, data));
 
   await Promise.all([updatePromise, documentExtractionPromise]);
-    await updateDocumentProcessingStatus(document.id, 'completed');
+    await repo.updateProcessingStatus(document.id, 'completed');
+    return await Promise.all(invoicesPromises);
   } catch (error) {
-    await updateDocumentProcessingStatus(document.id, 'failed');
+    await repo.updateProcessingStatus(document.id, 'failed');
     throw error;
   }
 };

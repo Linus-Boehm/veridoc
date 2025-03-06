@@ -1,5 +1,5 @@
 import type { AppContext } from '../../domain/context';
-import { createNewDocument } from '../../repository/document';
+import { DocumentRepository } from '../../repository/document';
 import { getSignedGetUrl, getSignedPutUrl } from '@repo/storage/server';
 import { v7 as uuidv7 } from 'uuid';
 import { Document } from '@taxel/domain/src/document';
@@ -17,7 +17,9 @@ export const createDocument = async (ctx: AppContext, fileName: string) => {
     processingStatus: 'waiting_for_upload',
   });
 
-  const documentPromise = createNewDocument(newDocument);
+  const repo = new DocumentRepository();
+
+  const documentPromise = repo.create(newDocument);
 
   const putUrlPromise = getSignedPutUrl(key);
   const getUrlPromise = getSignedGetUrl(key);

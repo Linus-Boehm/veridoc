@@ -1,4 +1,4 @@
-import { useApiClient } from './ApiClient';
+import { useApiClient } from '@taxel/queries/src/api';
 
 
 export const useCreateUpload = () => {
@@ -15,7 +15,7 @@ export const useCreateUpload = () => {
   });
   const upload = await response.json();
 
-  if(!upload.storageResource.putUrl) {
+  if(!upload.storageResource?.putUrl) {
     throw new Error('Document creation failed: No put URL');
   }
   
@@ -23,7 +23,7 @@ export const useCreateUpload = () => {
     await uploadToS3(file, new URL(upload.storageResource.putUrl), onProgress, abortSignal);
     await apiClient.documents['upload-acknoledge'].$post({
       json: {
-        key: upload.storageResource.key,
+        key: upload.storagePath,
       },
     });
   } catch (e) {

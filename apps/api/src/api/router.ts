@@ -8,7 +8,7 @@ import { prettyJSON } from 'hono/pretty-json';
 import documents from './documents';
 import monitoring from './monitoring';
 import webhooks from './webhooks';
-
+import invoices from './invoices';
 const router = new Hono()
   .use(prettyJSON())
   .use(
@@ -29,7 +29,8 @@ const router = new Hono()
     })
   )
   .route('/webhooks', webhooks)
-  .route('/documents', documents);
+  .route('/documents', documents)
+  .route('/invoices', invoices);
 
 export default router;
 

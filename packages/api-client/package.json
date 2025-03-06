@@ -1,5 +1,5 @@
 {
-  "name": "@repo/api-client",
+  "name": "@taxel/api-client",
   "version": "0.0.1",
   "private": true,
   "main": "./dist/index.js",

@@ -43,7 +43,6 @@ import {
   FolderIcon,
   FrameIcon,
   LifeBuoyIcon,
-  MapIcon,
   MoreHorizontalIcon,
   PieChartIcon,
   SendIcon,
@@ -68,64 +67,48 @@ const data = {
   },
   navMain: [
     {
-      title: 'Playground',
-      url: '#',
+      title: 'Rechnungen',
+      url: '/invoices',
       icon: SquareTerminalIcon,
       isActive: true,
       items: [
         {
-          title: 'History',
-          url: '#',
+          title: 'Alle Rechnungen',
+          url: '/invoices',
         },
         {
-          title: 'Starred',
-          url: '#',
+          title: 'Neue Rechnung',
+          url: '/invoices/new',
         },
         {
-          title: 'Settings',
-          url: '#',
+          title: 'Offene Rechnungen',
+          url: '/invoices/open',
         },
       ],
     },
     {
-      title: 'Models',
-      url: '#',
+      title: 'Konversationen',
+      url: '/inbox',
       icon: BotIcon,
       items: [
         {
-          title: 'Genesis',
-          url: '#',
-        },
-        {
-          title: 'Explorer',
-          url: '#',
-        },
-        {
-          title: 'Quantum',
-          url: '#',
+          title: 'Alle Konversationen',
+          url: '/inbox',
         },
       ],
     },
     {
-      title: 'Documentation',
-      url: '#',
+      title: 'Kreditoren',
+      url: '/suppliers',
       icon: BookOpenIcon,
       items: [
         {
-          title: 'Introduction',
-          url: '#',
+          title: 'Firmen',
+          url: '/suppliers/companies',
         },
         {
-          title: 'Get Started',
-          url: '#',
-        },
-        {
-          title: 'Tutorials',
-          url: '#',
-        },
-        {
-          title: 'Changelog',
-          url: '#',
+          title: 'Kontakte',
+          url: '/suppliers/contacts',
         },
       ],
     },
@@ -155,8 +138,8 @@ const data = {
   ],
   navSecondary: [
     {
-      title: 'Webhooks',
-      url: '/webhooks',
+      title: 'Konnektoren',
+      url: '/connectors',
       icon: AnchorIcon,
     },
     {
@@ -172,19 +155,14 @@ const data = {
   ],
   projects: [
     {
-      name: 'Design Engineering',
+      name: 'Regeln',
       url: '#',
       icon: FrameIcon,
     },
     {
-      name: 'Sales & Marketing',
+      name: 'Analytics',
       url: '#',
       icon: PieChartIcon,
-    },
-    {
-      name: 'Travel',
-      url: '#',
-      icon: MapIcon,
     },
   ],
 };
@@ -259,7 +237,7 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
             </SidebarMenu>
           </SidebarGroup>
           <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-            <SidebarGroupLabel>Projects</SidebarGroupLabel>
+            <SidebarGroupLabel>Tools</SidebarGroupLabel>
             <SidebarMenu>
               {data.projects.map((item) => (
                 <SidebarMenuItem key={item.name}>
@@ -335,7 +313,6 @@ export const GlobalSidebar = ({ children }: GlobalSidebarProperties) => {
                     userButtonOuterIdentifier: 'truncate pl-0',
                   },
                 }}
-                
               />
               <div className="flex shrink-0 items-center gap-px">
                 <ModeToggle />

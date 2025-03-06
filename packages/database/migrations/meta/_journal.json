@@ -8,6 +8,20 @@
       "when": 1740933665633,
       "tag": "0000_init",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1741156120326,
+      "tag": "0001_adjust-invoice-item",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1741161245336,
+      "tag": "0002_taxrate-to-text",
+      "breakpoints": true
     }
   ]
 }

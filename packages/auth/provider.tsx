@@ -40,7 +40,7 @@ export const AuthProvider = (
 
   return (
     <ClerkProvider
-      publishableKey={keys().NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY} sec
+      publishableKey={keys().NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
       {...properties}
       appearance={{ baseTheme, variables, elements }}
     />

@@ -162,7 +162,8 @@ export const invoiceItems = pgTable(
       .references(() => organizations.id, { onDelete: 'cascade' })
       .notNull(),
     position: integer().notNull(),
-    rawContent: text(),
+    matchedRowContent: text(),
+    rowConfidence: numeric(),
 
     description: text(),
     descriptionConfidence: numeric(),
@@ -176,15 +177,14 @@ export const invoiceItems = pgTable(
     quantityConfidence: numeric(),
     quantityMatchedContent: text(),
 
-    unitPrice: numeric(),
+    unitPriceValue: numeric(),
+    unitPriceCurrencyCode: text(),
     unitPriceConfidence: numeric(),
     unitPriceMatchedContent: text(),
 
-    totalPrice: numeric(),
-    totalPriceConfidence: numeric(),
-    totalPriceMatchedContent: text(),
-
-    amount: numeric(),
+    // Amount of the invoice item 
+    amountCurrencyCode: text(),
+    amountValue: numeric(),
     amountConfidence: numeric(),
     amountMatchedContent: text(),
 
@@ -194,7 +194,7 @@ export const invoiceItems = pgTable(
     taxAmountConfidence: numeric(),
     taxAmountMatchedContent: text(),
 
-    taxRate: numeric(),
+    taxRate: text(),
     taxRateConfidence: numeric(),
     taxRateMatchedContent: text(),
 
@@ -212,7 +212,8 @@ export const invoiceItems = pgTable(
     foreignKey({
       columns: [t.invoiceId, t.organizationId],
       foreignColumns: [invoices.id, invoices.organizationId],
-    }),0
+    }),
+    0,
   ]
 );
 
@@ -262,7 +263,7 @@ export const documentExtractionsRelations = relations(
   })
 );
 
-export const invoicesRelations = relations(invoices, ({ one }) => ({
+export const invoicesRelations = relations(invoices, ({ one, many }) => ({
   document: one(documents, {
     fields: [invoices.documentId],
     references: [documents.id],
@@ -271,6 +272,7 @@ export const invoicesRelations = relations(invoices, ({ one }) => ({
     fields: [invoices.organizationId],
     references: [organizations.id],
   }),
+  items: many(invoiceItems),
 }));
 
 export const invoiceItemsRelations = relations(invoiceItems, ({ one }) => ({

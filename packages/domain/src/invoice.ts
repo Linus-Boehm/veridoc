@@ -1,5 +1,6 @@
 import { z } from 'zod';
 import { Entity, type Timestamps } from '#base.ts';
+import type { Document } from './document';
 
 export const stringItemSchema = z.object({
   matchedContent: z.string(),
@@ -49,7 +50,7 @@ export const baseInvoiceItemSchema = z.object({
   unitPrice: currencyItemSchema.optional(),
   description: stringItemSchema.optional(),
   tax: currencyItemSchema.optional(),
-  taxRate: numberItemSchema.optional(),
+  taxRate: stringItemSchema.optional(),
   productCode: stringItemSchema.optional(),
   date: dateItemSchema.optional(),
   organizationId: z.string().uuid(),
@@ -67,20 +68,24 @@ export type BaseInvoice = z.infer<typeof baseInvoiceSchema>;
 
 
 export class InvoiceItem extends Entity<BaseInvoiceItem> {
+    
   
 }
 
 export class Invoice extends Entity<BaseInvoice> {
   private _items: InvoiceItem[] = [];
   private _documentId: string;
+  private _document: Document | undefined;
+
   constructor(props: BaseInvoice, documentId: string);
-  constructor(props: BaseInvoice, documentId: string, id: string, timestamps: Timestamps, items?: InvoiceItem[]);
+  constructor(props: BaseInvoice, documentId: string, id: string, timestamps: Timestamps, items?: InvoiceItem[], document?: Document);
   constructor(
     props: BaseInvoice,
     documentId: string,
     id?: string,
     timestamps?: Timestamps,
-    items?: InvoiceItem[]
+    items?: InvoiceItem[],
+    document?: Document
   ) {
     if(id && timestamps) {
       super(props, id, timestamps);
@@ -88,7 +93,12 @@ export class Invoice extends Entity<BaseInvoice> {
       super(props);
     }
     this._items = items ?? [];
-    this._documentId = documentId;
+    if(document) {
+      this.document = document;
+      this._documentId = document.id;
+    } else {
+      this._documentId = documentId;
+    }
   }
 
   get items() {
@@ -117,6 +127,25 @@ export class Invoice extends Entity<BaseInvoice> {
 
   itemCount() {
     return this._items.length;
+  }
+
+  get document(): Document | undefined {
+    return this._document;
+  }
+
+  set document(document: Document) {
+    this._document = document;
+    this._documentId = document.id;
+  }
+
+  toJSON() {
+    return {
+      ...this.props,
+      id: this._id,
+      documentId: this._documentId,
+      document: this._document?.toJSON(),
+      items: this._items.map((item) => item.toJSON()),
+    };
   }
 }
 

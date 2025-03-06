@@ -70,7 +70,7 @@ export const extractStringItem = (
   }
 
   if (item.type !== 'string') {
-    throw new Error(`Item is not a string: ${item.content}`);
+    throw new Error(`Item is not a string: ${JSON.stringify(item)}`);
   }
 
   return {
@@ -88,7 +88,7 @@ export const extractDateItem = (
   }
 
   if (item.type !== 'date') {
-    throw new Error(`Item is not a date: ${item.content}`);
+    throw new Error(`Item is not a date: ${JSON.stringify(item)}`);
   }
 
   return {
@@ -106,7 +106,7 @@ export const extractNumberItem = (
   }
 
   if (item.type !== 'number') {
-    throw new Error(`Item is not a number: ${item.content}`);
+    throw new Error(`Item is not a number: ${JSON.stringify(item)}`);
   }
 
   return {
@@ -137,7 +137,12 @@ export const extractCurrencyItem = (
   };
 };
 
-export const extractLineItems = (document: AnalyzedDocumentOutput, organizationId: string) => {
+//See available fields here: https://github.com/Azure-Samples/document-intelligence-code-samples/blob/main/schema/2024-11-30-ga/invoice.md
+
+export const extractLineItems = (
+  document: AnalyzedDocumentOutput,
+  organizationId: string
+) => {
   const lineItems = document.fields?.[FieldItems.LineItems];
 
   if (!lineItems) {
@@ -170,7 +175,7 @@ export const extractLineItems = (document: AnalyzedDocumentOutput, organizationI
         item.valueObject?.[LineItemFieldItems.Description]
       ),
       tax: extractCurrencyItem(item.valueObject?.[LineItemFieldItems.Tax]),
-      taxRate: extractNumberItem(
+      taxRate: extractStringItem(
         item.valueObject?.[LineItemFieldItems.TaxRate]
       ),
       productCode: extractStringItem(

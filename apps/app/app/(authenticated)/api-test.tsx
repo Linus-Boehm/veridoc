@@ -1,16 +1,17 @@
 'use client';
 
-import { ApiClient } from '../../services/ApiClient';
+import { useApiClient } from '@taxel/queries/src/api';
 import { useEffect } from 'react';
 import type { FC } from 'react';
 
 export const ApiTest: FC = () => {
+  const apiClient = useApiClient();
   useEffect(() => {
-    ApiClient.monitoring.health.$get().then((res) => {
+    apiClient.monitoring.health.$get().then((res) => {
       res.json().then((res) => {
         console.log(res);
       });
     });
-  }, []);
+  }, [apiClient]);
   return <div>ApiTest</div>;
 };
