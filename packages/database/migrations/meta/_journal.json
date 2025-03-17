@@ -22,6 +22,48 @@
       "when": 1741161245336,
       "tag": "0002_taxrate-to-text",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1741544587856,
+      "tag": "0003_invoice-data",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1741810665753,
+      "tag": "0004_postbox",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1741896475011,
+      "tag": "0005_postbox-unique",
+      "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1741905419292,
+      "tag": "0006_add-email",
+      "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "7",
+      "when": 1741907490592,
+      "tag": "0007_email-document-rel",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1742158559986,
+      "tag": "0008_email-archiving",
+      "breakpoints": true
     }
   ]
 }

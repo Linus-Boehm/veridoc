@@ -4,7 +4,16 @@ import { config, withAnalyzer } from '@repo/next-config';
 import { withLogtail, withSentry } from '@repo/observability/next-config';
 import type { NextConfig } from 'next';
 
-let nextConfig: NextConfig = withToolbar(withLogtail({ ...config }));
+let nextConfig: NextConfig = withToolbar(
+  withLogtail({
+    turbo: {
+      resolveAlias: {
+        canvas: './empty-module.ts',
+      },
+    },
+    ...config,
+  })
+);
 
 if (env.VERCEL) {
   nextConfig = withSentry(nextConfig);

@@ -13,11 +13,24 @@ export const timestampsSchema = z.object({
 
 export type Timestamps = z.infer<typeof timestampsSchema>;
 
+export const timestampDTOSchema = z.object({
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  archivedAt: z.string().nullable(),
+});
+
+export type TimestampDTO = z.infer<typeof timestampDTOSchema>;
+
+export const baseDTOschema = timestampDTOSchema.extend({
+  id: z.string().uuid(),
+});
+
+export type BaseDTO = z.infer<typeof baseDTOschema>;
+
 export abstract class Entity<T> {
   protected readonly _id: string;
   protected props: T;
-  protected _isPersisted = false;
-  protected timestamps!: Timestamps;
+  protected timestamps: Timestamps;
 
   // Constructor overload signatures
   constructor(props: T);
@@ -30,9 +43,13 @@ export abstract class Entity<T> {
     if (id && timestamps) {
       this._id = id;
       this.timestamps = timestamps;
-      this._isPersisted = true;
     } else {
       this._id = uuidv7();
+      this.timestamps = {
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        archivedAt: null,
+      };
     }
   }
 
@@ -58,10 +75,23 @@ export abstract class Entity<T> {
     return this._id;
   }
 
-  toJSON(): { id: string } & T {
+  getTimestampsJSON() {
+    return {
+      createdAt: this.timestamps?.createdAt.toISOString(),
+      updatedAt: this.timestamps?.updatedAt.toISOString(),
+      archivedAt: this.timestamps?.archivedAt?.toISOString() ?? null,
+    };
+  }
+
+  getTimestamps() {
+    return this.timestamps;
+  }
+
+  toJSON(): { id: string } & T & TimestampDTO {
     return {
       id: this._id,
       ...this.props,
+      ...this.getTimestampsJSON(),
     };
   }
 }

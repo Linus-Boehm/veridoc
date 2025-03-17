@@ -6,9 +6,12 @@ import { keys } from '@repo/auth/keys';
 import { cors } from 'hono/cors';
 import { prettyJSON } from 'hono/pretty-json';
 import documents from './documents';
-import monitoring from './monitoring';
-import webhooks from './webhooks';
+import inboundEmails from './inboundEmails';
 import invoices from './invoices';
+import monitoring from './monitoring';
+import postboxes from './postboxes';
+import webhooks from './webhooks';
+
 const router = new Hono()
   .use(prettyJSON())
   .use(
@@ -30,7 +33,9 @@ const router = new Hono()
   )
   .route('/webhooks', webhooks)
   .route('/documents', documents)
-  .route('/invoices', invoices);
+  .route('/invoices', invoices)
+  .route('/postboxes', postboxes)
+  .route('/inboundEmails', inboundEmails);
 
 export default router;
 

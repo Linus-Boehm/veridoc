@@ -35,6 +35,7 @@ export const config: NextConfig = {
 
   webpack(config) {
     config.ignoreWarnings = [{ module: otelRegex }];
+    config.resolve.alias.canvas = false;
 
     return config;
   },

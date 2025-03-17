@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Entity, type Timestamps } from '#base.ts';
+import { Entity, timestampDTOSchema, type Timestamps, timestampsSchema } from '#base.ts';
 
 export const processingStatusSchema = z.enum([
   'waiting_for_upload',
@@ -12,22 +12,32 @@ export const documentTypesSchema = z.enum(['invoice', 'receipt', 'unknown']);
 export type ProcessingStatus = z.infer<typeof processingStatusSchema>;
 export type DocumentType = z.infer<typeof documentTypesSchema>;
 
-export const baseDocumentSchema = z.object({
-  organizationId: z.string().uuid(),
-  fileName: z.string(),
-  storagePath: z.string(),
-  processingStatus: processingStatusSchema,
-  type: documentTypesSchema,
-});
-
-export type BaseDocument = z.infer<typeof baseDocumentSchema>;
-
 export const storageResourceSchema = z.object({
   putUrl: z.string().url(),
   getUrl: z.string().url(),
 });
 
 export type StorageResource = z.infer<typeof storageResourceSchema>;
+
+export const baseDocumentSchema = z.object({
+  organizationId: z.string().uuid(),
+  fileName: z.string(),
+  storagePath: z.string(),
+  emailId: z.string().optional(),
+  processingStatus: processingStatusSchema,
+  type: documentTypesSchema,
+});
+
+export const documentSchema = baseDocumentSchema
+  .extend({
+    id: z.string().uuid(),
+    storageResource: storageResourceSchema.optional(),
+  })
+  .extend(timestampDTOSchema.shape);
+
+export type DocumentDTO = z.infer<typeof documentSchema>;
+
+export type BaseDocument = z.infer<typeof baseDocumentSchema>;
 
 export class Document extends Entity<BaseDocument> {
   private _storageResource: StorageResource | undefined;
@@ -74,7 +84,15 @@ export class Document extends Entity<BaseDocument> {
     this.props.processingStatus = 'failed';
   }
 
-  toJSON() {
+  getStoragePath() {
+    return this.props.storagePath;
+  }
+
+  getOrganizationId() {
+    return this.props.organizationId;
+  }
+
+  toJSON(): DocumentDTO {
     return {
       ...super.toJSON(),
       storageResource: this._storageResource,

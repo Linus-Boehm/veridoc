@@ -44,5 +44,5 @@ yarn-error.log*
 .basehub
 
 # AI Rules
-.cursorrules
-.github/copilot-instructions.md
+#.cursorrules
+#.github/copilot-instructions.md

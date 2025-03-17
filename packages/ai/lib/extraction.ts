@@ -9,11 +9,53 @@ import {
   isUnexpected,
 } from '@azure-rest/ai-document-intelligence';
 import { AzureKeyCredential } from '@azure/core-auth';
+import {
+  type BaseInvoiceItem,
+  type CurrencyItem,
+  type DateItem,
+  Invoice,
+  InvoiceItem,
+  type NumberItem,
+  type StringItem,
+} from '@taxel/domain/src/invoice';
 import { keys } from '../keys';
-import { type StringItem, type DateItem, type NumberItem, type CurrencyItem, InvoiceItem, type BaseInvoiceItem, Invoice } from "@taxel/domain/src/invoice"
 
 export const FieldItems = {
   LineItems: 'Items',
+  CustomerName: 'CustomerName',
+  CustomerId: 'CustomerId',
+  PurchaseOrder: 'PurchaseOrder',
+  InvoiceId: 'InvoiceId',
+  InvoiceDate: 'InvoiceDate',
+  DueDate: 'DueDate',
+  VendorName: 'VendorName',
+  VendorAddress: 'VendorAddress',
+  VendorAddressRecipient: 'VendorAddressRecipient',
+  CustomerAddress: 'CustomerAddress',
+  CustomerAddressRecipient: 'CustomerAddressRecipient',
+  BillingAddress: 'BillingAddress',
+  BillingAddressRecipient: 'BillingAddressRecipient',
+  ShippingAddress: 'ShippingAddress',
+  ShippingAddressRecipient: 'ShippingAddressRecipient',
+  InvoiceTotal: 'InvoiceTotal',
+  SubTotal: 'SubTotal',
+  TotalTax: 'TotalTax',
+  TotalDiscount: 'TotalDiscount',
+  AmountDue: 'AmountDue',
+  PreviousUnpaidBalance: 'PreviousUnpaidBalance',
+  RemittanceAddress: 'RemittanceAddress',
+  RemittanceAddressRecipient: 'RemittanceAddressRecipient',
+  ServiceAddress: 'ServiceAddress',
+  ServiceAddressRecipient: 'ServiceAddressRecipient',
+  ServiceStartDate: 'ServiceStartDate',
+  ServiceEndDate: 'ServiceEndDate',
+  VendorTaxId: 'VendorTaxId',
+  CustomerTaxId: 'CustomerTaxId',
+  PaymentTerm: 'PaymentTerm',
+  KVKNumber: 'KVKNumber',
+  PaymentDetails: 'PaymentDetails',
+  TaxDetails: 'TaxDetails',
+  PaidInFourInstallments: 'PaidInFourInstallments',
 };
 
 export const LineItemFieldItems = {
@@ -35,7 +77,11 @@ const newDocumentIntelligenceClient = () => {
   );
 };
 
-export const extractDocumentFromUrl = async (url: string, organizationId: string, documentId: string) => {
+export const extractDocumentFromUrl = async (
+  url: string,
+  organizationId: string,
+  documentId: string
+) => {
   const client = newDocumentIntelligenceClient();
 
   const initialResponse = await client
@@ -59,9 +105,6 @@ export const extractDocumentFromUrl = async (url: string, organizationId: string
   return computeAnalyzeResult(organizationId, documentId, analyzeResult);
 };
 
-
-
-
 export const extractStringItem = (
   item?: DocumentFieldOutput
 ): StringItem | undefined => {
@@ -74,9 +117,9 @@ export const extractStringItem = (
   }
 
   return {
-    matchedContent: item.content || '',
-    confidence: item.confidence || 0,
-    value: item.valueString || '',
+    matchedContent: item.content ?? '',
+    confidence: item.confidence ?? 0,
+    value: item.valueString ?? '',
   };
 };
 
@@ -92,9 +135,9 @@ export const extractDateItem = (
   }
 
   return {
-    matchedContent: item.content || '',
-    confidence: item.confidence || 0,
-    value: item.valueDate || '',
+    matchedContent: item.content ?? '',
+    confidence: item.confidence ?? 0,
+    value: item.valueDate ?? '',
   };
 };
 
@@ -110,9 +153,9 @@ export const extractNumberItem = (
   }
 
   return {
-    matchedContent: item.content || '',
-    confidence: item.confidence || 0,
-    value: item.valueNumber || 0,
+    matchedContent: item.content ?? '',
+    confidence: item.confidence ?? 0,
+    value: item.valueNumber ?? 0,
   };
 };
 
@@ -128,11 +171,11 @@ export const extractCurrencyItem = (
   }
 
   return {
-    matchedContent: item.content || '',
-    confidence: item.confidence || 0,
+    matchedContent: item.content ?? '',
+    confidence: item.confidence ?? 0,
     currency: {
-      amount: item.valueCurrency?.amount || 0,
-      currencyCode: item.valueCurrency?.currencyCode || '',
+      amount: item.valueCurrency?.amount ?? 0,
+      currencyCode: item.valueCurrency?.currencyCode ?? '',
     },
   };
 };
@@ -190,19 +233,54 @@ export const extractLineItems = (
   return lineItemResult;
 };
 
-export const computeAnalyzeResult = (organizationId: string, documentId: string, result?: AnalyzeResultOutput) => {
+export const computeAnalyzeResult = (
+  organizationId: string,
+  documentId: string,
+  result?: AnalyzeResultOutput
+) => {
   return {
     raw: result,
-    invoices: result?.documents?.map((document) => computeInvoice(document, organizationId, documentId)) || [],
+    invoices:
+      result?.documents?.map((document) =>
+        computeInvoice(document, organizationId, documentId)
+      ) || [],
   };
 };
 
-export const computeInvoice = (document: AnalyzedDocumentOutput, organizationId: string, documentId: string) => {
+export const computeInvoice = (
+  document: AnalyzedDocumentOutput,
+  organizationId: string,
+  documentId: string
+) => {
   const lineItems = extractLineItems(document, organizationId);
 
-  const invoice = new Invoice({
-    organizationId: organizationId,
-  }, documentId);
+  const invoice = new Invoice(
+    {
+      organizationId: organizationId,
+      customerTaxId: extractStringItem(
+        document.fields?.[FieldItems.CustomerTaxId]
+      ),
+      invoiceDate: extractDateItem(document.fields?.[FieldItems.InvoiceDate]),
+      invoiceNumber: extractStringItem(document.fields?.[FieldItems.InvoiceId]),
+      invoiceTotal: extractCurrencyItem(
+        document.fields?.[FieldItems.InvoiceTotal]
+      ),
+      matchedCustomerName: extractStringItem(
+        document.fields?.[FieldItems.CustomerName]
+      ),
+      matchedVendorName: extractStringItem(
+        document.fields?.[FieldItems.VendorName]
+      ),
+      matchedPurchaseOrderNumber: extractStringItem(
+        document.fields?.[FieldItems.PurchaseOrder]
+      ),
+      paymentTerm: extractStringItem(document.fields?.[FieldItems.PaymentTerm]),
+      subTotal: extractCurrencyItem(document.fields?.[FieldItems.SubTotal]),
+      totalTax: extractCurrencyItem(document.fields?.[FieldItems.TotalTax]),
+      vendorTaxId: extractStringItem(document.fields?.[FieldItems.VendorTaxId]),
+    },
+    documentId
+  );
 
   invoice.addItems(lineItems);
 

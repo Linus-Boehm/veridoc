@@ -5,6 +5,7 @@ import { keys as email } from '@repo/email/keys';
 import { keys as core } from '@repo/next-config/keys';
 import { keys as observability } from '@repo/observability/keys';
 import { createEnv } from '@t3-oss/env-nextjs';
+import { z } from 'zod';
 
 export const env = createEnv({
   extends: [
@@ -15,7 +16,11 @@ export const env = createEnv({
     email(),
     observability(),
   ],
-  server: {},
+  server: {
+    POSTMARK_API_KEY: z.string().min(1),
+  },
   client: {},
-  runtimeEnv: {},
+  runtimeEnv: {
+    POSTMARK_API_KEY: process.env.POSTMARK_API_KEY,
+  },
 });

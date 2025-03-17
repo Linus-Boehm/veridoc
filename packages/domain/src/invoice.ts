@@ -1,6 +1,6 @@
 import { z } from 'zod';
-import { Entity, type Timestamps } from '#base.ts';
-import type { Document } from './document';
+import { Entity, type Timestamps, timestampDTOSchema } from '#base.ts';
+import { type Document, documentSchema } from './document';
 
 export const stringItemSchema = z.object({
   matchedContent: z.string(),
@@ -39,7 +39,6 @@ export const currencyItemSchema = z.object({
 
 export type CurrencyItem = z.infer<typeof currencyItemSchema>;
 
-
 export const baseInvoiceItemSchema = z.object({
   matchedRowContent: z.string(),
   confidence: z.number(),
@@ -58,19 +57,24 @@ export const baseInvoiceItemSchema = z.object({
 
 export type BaseInvoiceItem = z.infer<typeof baseInvoiceItemSchema>;
 
-
 export const baseInvoiceSchema = z.object({
   organizationId: z.string().uuid(),
+  subTotal: currencyItemSchema.optional(),
+  totalTax: currencyItemSchema.optional(),
+  invoiceNumber: stringItemSchema.optional(),
+  matchedVendorName: stringItemSchema.optional(),
+  invoiceDate: dateItemSchema.optional(),
+  paymentTerm: stringItemSchema.optional(),
+  vendorTaxId: stringItemSchema.optional(),
+  matchedCustomerName: stringItemSchema.optional(),
+  invoiceTotal: currencyItemSchema.optional(),
+  customerTaxId: stringItemSchema.optional(),
+  matchedPurchaseOrderNumber: stringItemSchema.optional(),
 });
 
 export type BaseInvoice = z.infer<typeof baseInvoiceSchema>;
 
-
-
-export class InvoiceItem extends Entity<BaseInvoiceItem> {
-    
-  
-}
+export class InvoiceItem extends Entity<BaseInvoiceItem> {}
 
 export class Invoice extends Entity<BaseInvoice> {
   private _items: InvoiceItem[] = [];
@@ -78,7 +82,14 @@ export class Invoice extends Entity<BaseInvoice> {
   private _document: Document | undefined;
 
   constructor(props: BaseInvoice, documentId: string);
-  constructor(props: BaseInvoice, documentId: string, id: string, timestamps: Timestamps, items?: InvoiceItem[], document?: Document);
+  constructor(
+    props: BaseInvoice,
+    documentId: string,
+    id: string,
+    timestamps: Timestamps,
+    items?: InvoiceItem[],
+    document?: Document
+  );
   constructor(
     props: BaseInvoice,
     documentId: string,
@@ -87,13 +98,13 @@ export class Invoice extends Entity<BaseInvoice> {
     items?: InvoiceItem[],
     document?: Document
   ) {
-    if(id && timestamps) {
+    if (id && timestamps) {
       super(props, id, timestamps);
     } else {
       super(props);
     }
     this._items = items ?? [];
-    if(document) {
+    if (document) {
       this.document = document;
       this._documentId = document.id;
     } else {
@@ -138,10 +149,9 @@ export class Invoice extends Entity<BaseInvoice> {
     this._documentId = document.id;
   }
 
-  toJSON() {
+  toJSON(): InvoiceDTO {
     return {
-      ...this.props,
-      id: this._id,
+      ...super.toJSON(),
       documentId: this._documentId,
       document: this._document?.toJSON(),
       items: this._items.map((item) => item.toJSON()),
@@ -149,5 +159,21 @@ export class Invoice extends Entity<BaseInvoice> {
   }
 }
 
+export const invoiceItemSchema = baseInvoiceItemSchema
+  .extend(timestampDTOSchema.shape)
+  .extend({
+    id: z.string().uuid(),
+  });
 
+export type InvoiceItemDTO = z.infer<typeof invoiceItemSchema>;
 
+export const invoiceSchema = baseInvoiceSchema
+  .extend(timestampDTOSchema.shape)
+  .extend({
+    items: z.array(invoiceItemSchema),
+    documentId: z.string().uuid(),
+    document: documentSchema.optional(),
+    id: z.string().uuid(),
+  });
+
+export type InvoiceDTO = z.infer<typeof invoiceSchema>;

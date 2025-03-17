@@ -2,7 +2,7 @@ import type { AppContext } from '../../domain/context';
 import { DocumentRepository } from '../../repository/document';
 import { getSignedGetUrl, getSignedPutUrl } from '@repo/storage/server';
 import { v7 as uuidv7 } from 'uuid';
-import { Document } from '@taxel/domain/src/document';
+import { Document, StorageResource } from '@taxel/domain/src/document';
 
 export const createDocument = async (ctx: AppContext, fileName: string) => {
   const { organization, user } = ctx;
@@ -21,19 +21,26 @@ export const createDocument = async (ctx: AppContext, fileName: string) => {
 
   const documentPromise = repo.create(newDocument);
 
+  const resource = await getStorageResourceForKey(key);
+
+  const document = await documentPromise;
+
+  document.setStorageResource(resource);
+
+  return document;
+};
+
+
+export const getStorageResourceForKey = async (
+  key: string
+): Promise<StorageResource> => {
   const putUrlPromise = getSignedPutUrl(key);
   const getUrlPromise = getSignedGetUrl(key);
 
-  const [document, putUrl, getUrl] = await Promise.all([
-    documentPromise,
+  const [putUrl, getUrl] = await Promise.all([
     putUrlPromise,
     getUrlPromise,
   ]);
 
-  document.setStorageResource({
-    putUrl,
-    getUrl,
-  });
-
-  return document;
+  return { putUrl, getUrl };
 };
