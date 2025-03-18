@@ -2,3 +2,14 @@
 description: General rule that gives some context about this project and the structure
 globs: 
 ---
+Pnpm monorepo using nextjs, hono, typescript and postgres with drizzle.
+General structure we have `apps` and `packages`. We use turbo repo to orchestrate the
+
+Import apps and packages:
+- `apps/app` main frontend app
+- `apps/api` backend api and workflows
+- `packages/design-system` reusable design system components
+- `packages/domain` core domain models, used by the backend and the frontend
+- `packages/queries` shared useQuery hooks
+- `packages/database` database schema and migrations
+- `packages/tailwind-config` shared global tailwind config

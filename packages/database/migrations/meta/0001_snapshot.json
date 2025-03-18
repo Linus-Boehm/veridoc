@@ -1,9 +1,730 @@
 {
-  "id": "40510bad-3d4b-420d-b7ee-f2890a663b11",
-  "prevId": "df88efc3-ffa4-4bdf-be7a-ebe75cedb0ee",
+  "id": "526060df-956b-453a-97f5-32a6ba88c353",
+  "prevId": "7225a268-92b3-4052-9687-e2a320dee686",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
+    "public.addresses": {
+      "name": "addresses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "addressName": {
+          "name": "addressName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "addressLine1": {
+          "name": "addressLine1",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "addressLine2": {
+          "name": "addressLine2",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "administrativeArea": {
+          "name": "administrativeArea",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "locality": {
+          "name": "locality",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "postalCode": {
+          "name": "postalCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "countryCode": {
+          "name": "countryCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "archivedAt": {
+          "name": "archivedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "archived_by": {
+          "name": "archived_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "addresses_organizationId_organizations_id_fk": {
+          "name": "addresses_organizationId_organizations_id_fk",
+          "tableFrom": "addresses",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "addresses_archived_by_users_id_fk": {
+          "name": "addresses_archived_by_users_id_fk",
+          "tableFrom": "addresses",
+          "tableTo": "users",
+          "columnsFrom": [
+            "archived_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "addresses_organizationId_id_unique": {
+          "name": "addresses_organizationId_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "organizationId",
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.bank_accounts": {
+      "name": "bank_accounts",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accountName": {
+          "name": "accountName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "accountHolderName": {
+          "name": "accountHolderName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "iban": {
+          "name": "iban",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bic": {
+          "name": "bic",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "bankName": {
+          "name": "bankName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "routingNumber": {
+          "name": "routingNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "accountNumber": {
+          "name": "accountNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "currencyCode": {
+          "name": "currencyCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "isPrimary": {
+          "name": "isPrimary",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "archivedAt": {
+          "name": "archivedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "archived_by": {
+          "name": "archived_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "bank_accounts_companyId_companies_id_fk": {
+          "name": "bank_accounts_companyId_companies_id_fk",
+          "tableFrom": "bank_accounts",
+          "tableTo": "companies",
+          "columnsFrom": [
+            "companyId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bank_accounts_organizationId_organizations_id_fk": {
+          "name": "bank_accounts_organizationId_organizations_id_fk",
+          "tableFrom": "bank_accounts",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "bank_accounts_archived_by_users_id_fk": {
+          "name": "bank_accounts_archived_by_users_id_fk",
+          "tableFrom": "bank_accounts",
+          "tableTo": "users",
+          "columnsFrom": [
+            "archived_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "bank_accounts_organizationId_companyId_companies_organizationId_id_fk": {
+          "name": "bank_accounts_organizationId_companyId_companies_organizationId_id_fk",
+          "tableFrom": "bank_accounts",
+          "tableTo": "companies",
+          "columnsFrom": [
+            "organizationId",
+            "companyId"
+          ],
+          "columnsTo": [
+            "organizationId",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.companies": {
+      "name": "companies",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "countryCode": {
+          "name": "countryCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "vatId": {
+          "name": "vatId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "industryId": {
+          "name": "industryId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "ext_vendor_number": {
+          "name": "ext_vendor_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "archivedAt": {
+          "name": "archivedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "archived_by": {
+          "name": "archived_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "companies_organizationId_organizations_id_fk": {
+          "name": "companies_organizationId_organizations_id_fk",
+          "tableFrom": "companies",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "companies_industryId_industries_id_fk": {
+          "name": "companies_industryId_industries_id_fk",
+          "tableFrom": "companies",
+          "tableTo": "industries",
+          "columnsFrom": [
+            "industryId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "companies_archived_by_users_id_fk": {
+          "name": "companies_archived_by_users_id_fk",
+          "tableFrom": "companies",
+          "tableTo": "users",
+          "columnsFrom": [
+            "archived_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "companies_organizationId_id_unique": {
+          "name": "companies_organizationId_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "organizationId",
+            "id"
+          ]
+        },
+        "companies_organizationId_ext_vendor_number_unique": {
+          "name": "companies_organizationId_ext_vendor_number_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "organizationId",
+            "ext_vendor_number"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.company_addresses": {
+      "name": "company_addresses",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "addressId": {
+          "name": "addressId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "type": {
+          "name": "type",
+          "type": "address_types",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'other'"
+        },
+        "isPrimary": {
+          "name": "isPrimary",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "company_addresses_companyId_companies_id_fk": {
+          "name": "company_addresses_companyId_companies_id_fk",
+          "tableFrom": "company_addresses",
+          "tableTo": "companies",
+          "columnsFrom": [
+            "companyId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "company_addresses_addressId_addresses_id_fk": {
+          "name": "company_addresses_addressId_addresses_id_fk",
+          "tableFrom": "company_addresses",
+          "tableTo": "addresses",
+          "columnsFrom": [
+            "addressId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "company_addresses_organizationId_organizations_id_fk": {
+          "name": "company_addresses_organizationId_organizations_id_fk",
+          "tableFrom": "company_addresses",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "company_addresses_organizationId_companyId_companies_organizationId_id_fk": {
+          "name": "company_addresses_organizationId_companyId_companies_organizationId_id_fk",
+          "tableFrom": "company_addresses",
+          "tableTo": "companies",
+          "columnsFrom": [
+            "organizationId",
+            "companyId"
+          ],
+          "columnsTo": [
+            "organizationId",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "company_addresses_organizationId_addressId_addresses_organizationId_id_fk": {
+          "name": "company_addresses_organizationId_addressId_addresses_organizationId_id_fk",
+          "tableFrom": "company_addresses",
+          "tableTo": "addresses",
+          "columnsFrom": [
+            "organizationId",
+            "addressId"
+          ],
+          "columnsTo": [
+            "organizationId",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "company_addresses_organizationId_companyId_addressId_unique": {
+          "name": "company_addresses_organizationId_companyId_addressId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "organizationId",
+            "companyId",
+            "addressId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.company_domains": {
+      "name": "company_domains",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "companyId": {
+          "name": "companyId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "domain": {
+          "name": "domain",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "isPrimary": {
+          "name": "isPrimary",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "isVerified": {
+          "name": "isVerified",
+          "type": "boolean",
+          "primaryKey": false,
+          "notNull": true,
+          "default": false
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "archivedAt": {
+          "name": "archivedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "archived_by": {
+          "name": "archived_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "company_domains_companyId_companies_id_fk": {
+          "name": "company_domains_companyId_companies_id_fk",
+          "tableFrom": "company_domains",
+          "tableTo": "companies",
+          "columnsFrom": [
+            "companyId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "company_domains_organizationId_organizations_id_fk": {
+          "name": "company_domains_organizationId_organizations_id_fk",
+          "tableFrom": "company_domains",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "company_domains_archived_by_users_id_fk": {
+          "name": "company_domains_archived_by_users_id_fk",
+          "tableFrom": "company_domains",
+          "tableTo": "users",
+          "columnsFrom": [
+            "archived_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "company_domains_organizationId_companyId_companies_organizationId_id_fk": {
+          "name": "company_domains_organizationId_companyId_companies_organizationId_id_fk",
+          "tableFrom": "company_domains",
+          "tableTo": "companies",
+          "columnsFrom": [
+            "organizationId",
+            "companyId"
+          ],
+          "columnsTo": [
+            "organizationId",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "company_domains_organizationId_domain_unique": {
+          "name": "company_domains_organizationId_domain_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "organizationId",
+            "domain"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.document_extractions": {
       "name": "document_extractions",
       "schema": "",
@@ -75,17 +796,17 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "document_extractions_documentId_organizationId_documents_id_organizationId_fk": {
-          "name": "document_extractions_documentId_organizationId_documents_id_organizationId_fk",
+        "document_extractions_organizationId_documentId_documents_organizationId_id_fk": {
+          "name": "document_extractions_organizationId_documentId_documents_organizationId_id_fk",
           "tableFrom": "document_extractions",
           "tableTo": "documents",
           "columnsFrom": [
-            "documentId",
-            "organizationId"
+            "organizationId",
+            "documentId"
           ],
           "columnsTo": [
-            "id",
-            "organizationId"
+            "organizationId",
+            "id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -93,12 +814,12 @@
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {
-        "document_extractions_documentId_organizationId_unique": {
-          "name": "document_extractions_documentId_organizationId_unique",
+        "document_extractions_organizationId_documentId_unique": {
+          "name": "document_extractions_organizationId_documentId_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "documentId",
-            "organizationId"
+            "organizationId",
+            "documentId"
           ]
         }
       },
@@ -121,6 +842,12 @@
           "type": "uuid",
           "primaryKey": false,
           "notNull": true
+        },
+        "emailId": {
+          "name": "emailId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
         },
         "fileName": {
           "name": "fileName",
@@ -179,6 +906,34 @@
           ],
           "onDelete": "cascade",
           "onUpdate": "no action"
+        },
+        "documents_emailId_inbound_emails_id_fk": {
+          "name": "documents_emailId_inbound_emails_id_fk",
+          "tableFrom": "documents",
+          "tableTo": "inbound_emails",
+          "columnsFrom": [
+            "emailId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "documents_organizationId_emailId_inbound_emails_organizationId_id_fk": {
+          "name": "documents_organizationId_emailId_inbound_emails_organizationId_id_fk",
+          "tableFrom": "documents",
+          "tableTo": "inbound_emails",
+          "columnsFrom": [
+            "organizationId",
+            "emailId"
+          ],
+          "columnsTo": [
+            "organizationId",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -190,12 +945,254 @@
             "storagePath"
           ]
         },
-        "documents_id_organizationId_unique": {
-          "name": "documents_id_organizationId_unique",
+        "documents_organizationId_id_unique": {
+          "name": "documents_organizationId_id_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "id",
+            "organizationId",
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.inbound_emails": {
+      "name": "inbound_emails",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "postboxId": {
+          "name": "postboxId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "from": {
+          "name": "from",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "fromName": {
+          "name": "fromName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "to": {
+          "name": "to",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "cc": {
+          "name": "cc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bcc": {
+          "name": "bcc",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "subject": {
+          "name": "subject",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "messageId": {
+          "name": "messageId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bodyText": {
+          "name": "bodyText",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "bodyHtml": {
+          "name": "bodyHtml",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "date": {
+          "name": "date",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "status": {
+          "name": "status",
+          "type": "email_status",
+          "typeSchema": "public",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "'received'"
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "archivedAt": {
+          "name": "archivedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "archived_by": {
+          "name": "archived_by",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": false
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "inbound_emails_postboxId_postboxes_id_fk": {
+          "name": "inbound_emails_postboxId_postboxes_id_fk",
+          "tableFrom": "inbound_emails",
+          "tableTo": "postboxes",
+          "columnsFrom": [
+            "postboxId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "inbound_emails_organizationId_organizations_id_fk": {
+          "name": "inbound_emails_organizationId_organizations_id_fk",
+          "tableFrom": "inbound_emails",
+          "tableTo": "organizations",
+          "columnsFrom": [
             "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        },
+        "inbound_emails_archived_by_users_id_fk": {
+          "name": "inbound_emails_archived_by_users_id_fk",
+          "tableFrom": "inbound_emails",
+          "tableTo": "users",
+          "columnsFrom": [
+            "archived_by"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        },
+        "inbound_emails_organizationId_postboxId_postboxes_organizationId_id_fk": {
+          "name": "inbound_emails_organizationId_postboxId_postboxes_organizationId_id_fk",
+          "tableFrom": "inbound_emails",
+          "tableTo": "postboxes",
+          "columnsFrom": [
+            "organizationId",
+            "postboxId"
+          ],
+          "columnsTo": [
+            "organizationId",
+            "id"
+          ],
+          "onDelete": "no action",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "inbound_emails_organizationId_id_unique": {
+          "name": "inbound_emails_organizationId_id_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "organizationId",
+            "id"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
+    "public.industries": {
+      "name": "industries",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "industries_code_unique": {
+          "name": "industries_code_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "code"
           ]
         }
       },
@@ -371,7 +1368,7 @@
         },
         "taxRate": {
           "name": "taxRate",
-          "type": "numeric",
+          "type": "text",
           "primaryKey": false,
           "notNull": false
         },
@@ -466,17 +1463,17 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "invoice_items_invoiceId_organizationId_invoices_id_organizationId_fk": {
-          "name": "invoice_items_invoiceId_organizationId_invoices_id_organizationId_fk",
+        "invoice_items_organizationId_invoiceId_invoices_organizationId_id_fk": {
+          "name": "invoice_items_organizationId_invoiceId_invoices_organizationId_id_fk",
           "tableFrom": "invoice_items",
           "tableTo": "invoices",
           "columnsFrom": [
-            "invoiceId",
-            "organizationId"
+            "organizationId",
+            "invoiceId"
           ],
           "columnsTo": [
-            "id",
-            "organizationId"
+            "organizationId",
+            "id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -510,38 +1507,218 @@
           "primaryKey": false,
           "notNull": true
         },
-        "dueDate": {
-          "name": "dueDate",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "dueDateConfidence": {
-          "name": "dueDateConfidence",
+        "subTotal": {
+          "name": "subTotal",
           "type": "numeric",
           "primaryKey": false,
           "notNull": false
         },
-        "dueDateMatchedValue": {
-          "name": "dueDateMatchedValue",
-          "type": "date",
-          "primaryKey": false,
-          "notNull": false
-        },
-        "creditorInvoiceNumber": {
-          "name": "creditorInvoiceNumber",
+        "subTotalCurrencyCode": {
+          "name": "subTotalCurrencyCode",
           "type": "text",
           "primaryKey": false,
           "notNull": false
         },
-        "creditorInvoiceNumberConfidence": {
-          "name": "creditorInvoiceNumberConfidence",
+        "subTotalConfidence": {
+          "name": "subTotalConfidence",
           "type": "numeric",
           "primaryKey": false,
           "notNull": false
         },
-        "creditorInvoiceNumberMatchedValue": {
-          "name": "creditorInvoiceNumberMatchedValue",
+        "subTotalMatchedContent": {
+          "name": "subTotalMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "totalTax": {
+          "name": "totalTax",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "totalTaxCurrencyCode": {
+          "name": "totalTaxCurrencyCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "totalTaxConfidence": {
+          "name": "totalTaxConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "totalTaxMatchedContent": {
+          "name": "totalTaxMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceNumber": {
+          "name": "invoiceNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceNumberConfidence": {
+          "name": "invoiceNumberConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceNumberMatchedContent": {
+          "name": "invoiceNumberMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedVendorName": {
+          "name": "matchedVendorName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedVendorNameConfidence": {
+          "name": "matchedVendorNameConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedVendorNameMatchedContent": {
+          "name": "matchedVendorNameMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceDate": {
+          "name": "invoiceDate",
+          "type": "date",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceDateConfidence": {
+          "name": "invoiceDateConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceDateMatchedContent": {
+          "name": "invoiceDateMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paymentTerm": {
+          "name": "paymentTerm",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paymentTermConfidence": {
+          "name": "paymentTermConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "paymentTermMatchedContent": {
+          "name": "paymentTermMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vendorTaxId": {
+          "name": "vendorTaxId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vendorTaxIdConfidence": {
+          "name": "vendorTaxIdConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "vendorTaxIdMatchedContent": {
+          "name": "vendorTaxIdMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedCustomerName": {
+          "name": "matchedCustomerName",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedCustomerNameConfidence": {
+          "name": "matchedCustomerNameConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedCustomerNameMatchedContent": {
+          "name": "matchedCustomerNameMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceTotal": {
+          "name": "invoiceTotal",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceTotalCurrencyCode": {
+          "name": "invoiceTotalCurrencyCode",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceTotalConfidence": {
+          "name": "invoiceTotalConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "invoiceTotalMatchedContent": {
+          "name": "invoiceTotalMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customerTaxId": {
+          "name": "customerTaxId",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customerTaxIdConfidence": {
+          "name": "customerTaxIdConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "customerTaxIdMatchedContent": {
+          "name": "customerTaxIdMatchedContent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedPurchaseOrderNumber": {
+          "name": "matchedPurchaseOrderNumber",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedPurchaseOrderNumberConfidence": {
+          "name": "matchedPurchaseOrderNumberConfidence",
+          "type": "numeric",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "matchedPurchaseOrderNumberMatchedContent": {
+          "name": "matchedPurchaseOrderNumberMatchedContent",
           "type": "text",
           "primaryKey": false,
           "notNull": false
@@ -589,17 +1766,17 @@
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
-        "invoices_documentId_organizationId_documents_id_organizationId_fk": {
-          "name": "invoices_documentId_organizationId_documents_id_organizationId_fk",
+        "invoices_organizationId_documentId_documents_organizationId_id_fk": {
+          "name": "invoices_organizationId_documentId_documents_organizationId_id_fk",
           "tableFrom": "invoices",
           "tableTo": "documents",
           "columnsFrom": [
-            "documentId",
-            "organizationId"
+            "organizationId",
+            "documentId"
           ],
           "columnsTo": [
-            "id",
-            "organizationId"
+            "organizationId",
+            "id"
           ],
           "onDelete": "no action",
           "onUpdate": "no action"
@@ -614,12 +1791,12 @@
             "documentId"
           ]
         },
-        "invoices_id_organizationId_unique": {
-          "name": "invoices_id_organizationId_unique",
+        "invoices_organizationId_id_unique": {
+          "name": "invoices_organizationId_id_unique",
           "nullsNotDistinct": false,
           "columns": [
-            "id",
-            "organizationId"
+            "organizationId",
+            "id"
           ]
         }
       },
@@ -781,6 +1958,100 @@
       "checkConstraints": {},
       "isRLSEnabled": false
     },
+    "public.postboxes": {
+      "name": "postboxes",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "uuid",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "postmarkServerId": {
+          "name": "postmarkServerId",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "postmarkInboundEmail": {
+          "name": "postmarkInboundEmail",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "organizationId": {
+          "name": "organizationId",
+          "type": "uuid",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "createdAt": {
+          "name": "createdAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        },
+        "updatedAt": {
+          "name": "updatedAt",
+          "type": "timestamp with time zone",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {},
+      "foreignKeys": {
+        "postboxes_organizationId_organizations_id_fk": {
+          "name": "postboxes_organizationId_organizations_id_fk",
+          "tableFrom": "postboxes",
+          "tableTo": "organizations",
+          "columnsFrom": [
+            "organizationId"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "cascade",
+          "onUpdate": "no action"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {
+        "postboxes_postmarkServerId_unique": {
+          "name": "postboxes_postmarkServerId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "postmarkServerId"
+          ]
+        },
+        "postboxes_postmarkInboundEmail_unique": {
+          "name": "postboxes_postmarkInboundEmail_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "postmarkInboundEmail"
+          ]
+        },
+        "postboxes_id_organizationId_unique": {
+          "name": "postboxes_id_organizationId_unique",
+          "nullsNotDistinct": false,
+          "columns": [
+            "id",
+            "organizationId"
+          ]
+        }
+      },
+      "policies": {},
+      "checkConstraints": {},
+      "isRLSEnabled": false
+    },
     "public.users": {
       "name": "users",
       "schema": "",
@@ -855,6 +2126,17 @@
     }
   },
   "enums": {
+    "public.address_types": {
+      "name": "address_types",
+      "schema": "public",
+      "values": [
+        "billing",
+        "shipping",
+        "headquarters",
+        "branch",
+        "other"
+      ]
+    },
     "public.document_processing_status": {
       "name": "document_processing_status",
       "schema": "public",
@@ -872,6 +2154,17 @@
         "invoice",
         "receipt",
         "unknown"
+      ]
+    },
+    "public.email_status": {
+      "name": "email_status",
+      "schema": "public",
+      "values": [
+        "received",
+        "processed",
+        "partial_processed",
+        "failed",
+        "archived"
       ]
     }
   },

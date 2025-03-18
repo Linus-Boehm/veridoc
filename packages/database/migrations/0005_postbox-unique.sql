@@ -1,2 +1,0 @@
-ALTER TABLE "postboxes" ADD CONSTRAINT "postboxes_postmarkServerId_unique" UNIQUE("postmarkServerId");--> statement-breakpoint
-ALTER TABLE "postboxes" ADD CONSTRAINT "postboxes_postmarkInboundEmail_unique" UNIQUE("postmarkInboundEmail");

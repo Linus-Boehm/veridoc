@@ -1,0 +1,2 @@
+ALTER TABLE "companies" ADD COLUMN "ext_vendor_number" text;--> statement-breakpoint
+ALTER TABLE "companies" ADD CONSTRAINT "companies_organizationId_ext_vendor_number_unique" UNIQUE("organizationId","ext_vendor_number");

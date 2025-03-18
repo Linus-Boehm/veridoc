@@ -1,5 +1,6 @@
 import { relations } from 'drizzle-orm';
 import {
+  boolean,
   date,
   foreignKey,
   integer,
@@ -47,6 +48,159 @@ export const users = pgTable('users', {
   clerkId: text().notNull().unique(),
   ...timestamps,
 });
+
+export const addressTypes = pgEnum('address_types', [
+  'billing',
+  'shipping',
+  'headquarters',
+  'branch',
+  'other',
+]);
+
+export const industries = pgTable('industries', {
+  id: uuid('id')
+    .primaryKey()
+    .$defaultFn(() => uuidv7()),
+  name: text().notNull(),
+  code: text().notNull().unique(),
+  ...timestamps,
+});
+
+export const companies = pgTable(
+  'companies',
+  {
+    id: uuid('id')
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
+    organizationId: uuid()
+      .references(() => organizations.id, { onDelete: 'cascade' })
+      .notNull(),
+    name: text().notNull(),
+    countryCode: text().notNull(), // 3-digit ISO code
+    vatId: text(),
+    industryId: uuid().references(() => industries.id),
+    ext_vendor_number: text(),
+    ...timestamps,
+    ...softDeletion,
+  },
+  (t) => [
+    unique().on(t.organizationId, t.id),
+    unique().on(t.organizationId, t.ext_vendor_number),
+  ]
+);
+
+export const companyDomains = pgTable(
+  'company_domains',
+  {
+    id: uuid('id')
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
+    companyId: uuid()
+      .references(() => companies.id, { onDelete: 'cascade' })
+      .notNull(),
+    organizationId: uuid()
+      .references(() => organizations.id, { onDelete: 'cascade' })
+      .notNull(),
+    domain: text().notNull(),
+    isPrimary: boolean().notNull().default(false),
+    isVerified: boolean().notNull().default(false),
+    ...timestamps,
+    ...softDeletion,
+  },
+  (t) => [
+    unique().on(t.organizationId, t.domain),
+    foreignKey({
+      columns: [t.organizationId, t.companyId],
+      foreignColumns: [companies.organizationId, companies.id],
+    }),
+  ]
+);
+
+export const addresses = pgTable(
+  'addresses',
+  {
+    id: uuid('id')
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
+    organizationId: uuid()
+      .references(() => organizations.id, { onDelete: 'cascade' })
+      .notNull(),
+    addressName: text(),
+    addressLine1: text().notNull(),
+    addressLine2: text(),
+    administrativeArea: text(), // state, province, county, etc.
+    locality: text(), // city, town, village, etc.
+    postalCode: text().notNull(),
+    countryCode: text().notNull(), // 3-digit ISO code
+    ...timestamps,
+    ...softDeletion,
+  },
+  (t) => [unique().on(t.organizationId, t.id)]
+);
+
+export const companyAddresses = pgTable(
+  'company_addresses',
+  {
+    id: uuid('id')
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
+    companyId: uuid()
+      .references(() => companies.id, { onDelete: 'cascade' })
+      .notNull(),
+    addressId: uuid()
+      .references(() => addresses.id, { onDelete: 'cascade' })
+      .notNull(),
+    organizationId: uuid()
+      .references(() => organizations.id, { onDelete: 'cascade' })
+      .notNull(),
+    type: addressTypes().notNull().default('other'),
+    isPrimary: boolean().notNull().default(false),
+    ...timestamps,
+  },
+  (t) => [
+    unique().on(t.organizationId, t.companyId, t.addressId),
+    foreignKey({
+      columns: [t.organizationId, t.companyId],
+      foreignColumns: [companies.organizationId, companies.id],
+    }),
+    foreignKey({
+      columns: [t.organizationId, t.addressId],
+      foreignColumns: [addresses.organizationId, addresses.id],
+    }),
+  ]
+);
+
+export const bankAccounts = pgTable(
+  'bank_accounts',
+  {
+    id: uuid('id')
+      .primaryKey()
+      .$defaultFn(() => uuidv7()),
+    companyId: uuid()
+      .references(() => companies.id, { onDelete: 'cascade' })
+      .notNull(),
+    organizationId: uuid()
+      .references(() => organizations.id, { onDelete: 'cascade' })
+      .notNull(),
+    accountName: text().notNull(), // The name of the account
+    accountHolderName: text().notNull(), // The name of the account holder
+    iban: text(),
+    bic: text(),
+    bankName: text(),
+    routingNumber: text(), // The 9-digit ABA routing number
+    accountNumber: text(),
+    currencyCode: text(), // USD, EUR, GBP, etc.
+    isPrimary: boolean().notNull().default(false),
+    ...timestamps,
+    ...softDeletion,
+  },
+  (t) => [
+    foreignKey({
+      columns: [t.organizationId, t.companyId],
+      foreignColumns: [companies.organizationId, companies.id],
+    }),
+  ]
+);
 
 export const organizationMemberships = pgTable(
   'organization_memberships',
@@ -105,7 +259,7 @@ export const documents = pgTable(
     ...timestamps,
   },
   (t) => [
-    unique().on(t.id, t.organizationId),
+    unique().on(t.organizationId, t.id),
     foreignKey({
       columns: [t.organizationId, t.emailId],
       foreignColumns: [inboundEmails.organizationId, inboundEmails.id],
@@ -130,10 +284,10 @@ export const documentExtractions = pgTable(
   },
   (t) => [
     foreignKey({
-      columns: [t.documentId, t.organizationId],
-      foreignColumns: [documents.id, documents.organizationId],
+      columns: [t.organizationId, t.documentId],
+      foreignColumns: [documents.organizationId, documents.id],
     }),
-    unique().on(t.documentId, t.organizationId),
+    unique().on(t.organizationId, t.documentId),
   ]
 );
 
@@ -201,10 +355,10 @@ export const invoices = pgTable(
   },
   (t) => [
     foreignKey({
-      columns: [t.documentId, t.organizationId],
-      foreignColumns: [documents.id, documents.organizationId],
+      columns: [t.organizationId, t.documentId],
+      foreignColumns: [documents.organizationId, documents.id],
     }),
-    unique().on(t.id, t.organizationId),
+    unique().on(t.organizationId, t.id),
   ]
 );
 
@@ -269,10 +423,9 @@ export const invoiceItems = pgTable(
   },
   (t) => [
     foreignKey({
-      columns: [t.invoiceId, t.organizationId],
-      foreignColumns: [invoices.id, invoices.organizationId],
+      columns: [t.organizationId, t.invoiceId],
+      foreignColumns: [invoices.organizationId, invoices.id],
     }),
-    0,
   ]
 );
 
@@ -321,8 +474,8 @@ export const inboundEmails = pgTable(
   },
   (t) => [
     foreignKey({
-      columns: [t.postboxId, t.organizationId],
-      foreignColumns: [postboxes.id, postboxes.organizationId],
+      columns: [t.organizationId, t.postboxId],
+      foreignColumns: [postboxes.organizationId, postboxes.id],
     }),
     unique().on(t.organizationId, t.id),
   ]
@@ -352,6 +505,8 @@ export const organizationsRelations = relations(organizations, ({ many }) => ({
   documentExtractions: many(documentExtractions),
   invoices: many(invoices),
   inboundEmails: many(inboundEmails),
+  companies: many(companies),
+  addresses: many(addresses),
 }));
 
 export const userMembershipsRelations = relations(users, ({ many }) => ({
@@ -428,3 +583,69 @@ export const inboundEmailsRelations = relations(
     documents: many(documents),
   })
 );
+
+export const industriesRelations = relations(industries, ({ many }) => ({
+  companies: many(companies),
+}));
+
+export const companiesRelations = relations(companies, ({ one, many }) => ({
+  organization: one(organizations, {
+    fields: [companies.organizationId],
+    references: [organizations.id],
+  }),
+  industry: one(industries, {
+    fields: [companies.industryId],
+    references: [industries.id],
+  }),
+  addresses: many(companyAddresses),
+  bankAccounts: many(bankAccounts),
+  domains: many(companyDomains),
+}));
+
+export const addressesRelations = relations(addresses, ({ one, many }) => ({
+  organization: one(organizations, {
+    fields: [addresses.organizationId],
+    references: [organizations.id],
+  }),
+  companies: many(companyAddresses),
+}));
+
+export const companyAddressesRelations = relations(
+  companyAddresses,
+  ({ one }) => ({
+    company: one(companies, {
+      fields: [companyAddresses.companyId],
+      references: [companies.id],
+    }),
+    address: one(addresses, {
+      fields: [companyAddresses.addressId],
+      references: [addresses.id],
+    }),
+    organization: one(organizations, {
+      fields: [companyAddresses.organizationId],
+      references: [organizations.id],
+    }),
+  })
+);
+
+export const bankAccountsRelations = relations(bankAccounts, ({ one }) => ({
+  company: one(companies, {
+    fields: [bankAccounts.companyId],
+    references: [companies.id],
+  }),
+  organization: one(organizations, {
+    fields: [bankAccounts.organizationId],
+    references: [organizations.id],
+  }),
+}));
+
+export const companyDomainsRelations = relations(companyDomains, ({ one }) => ({
+  company: one(companies, {
+    fields: [companyDomains.companyId],
+    references: [companies.id],
+  }),
+  organization: one(organizations, {
+    fields: [companyDomains.organizationId],
+    references: [organizations.id],
+  }),
+}));

@@ -4,7 +4,9 @@
   "bin": {
     "next-forge": "dist/index.js"
   },
-  "files": ["dist/index.js"],
+  "files": [
+    "dist/index.js"
+  ],
   "scripts": {
     "build": "turbo build",
     "dev": "turbo dev",
@@ -37,6 +39,7 @@
   "packageManager": "pnpm@10.2.1",
   "dependencies": {
     "@clack/prompts": "^0.10.0",
+    "@js-temporal/polyfill": "^0.4.4",
     "commander": "^13.1.0"
   },
   "type": "module"

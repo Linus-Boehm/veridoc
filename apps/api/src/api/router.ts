@@ -11,6 +11,7 @@ import invoices from './invoices';
 import monitoring from './monitoring';
 import postboxes from './postboxes';
 import webhooks from './webhooks';
+import companies from './companies';
 
 const router = new Hono()
   .use(prettyJSON())
@@ -35,6 +36,7 @@ const router = new Hono()
   .route('/documents', documents)
   .route('/invoices', invoices)
   .route('/postboxes', postboxes)
+  .route('/companies', companies)
   .route('/inboundEmails', inboundEmails);
 
 export default router;

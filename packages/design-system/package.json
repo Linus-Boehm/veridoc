@@ -39,6 +39,7 @@
     "@repo/analytics": "workspace:*",
     "@repo/auth": "workspace:*",
     "@repo/observability": "workspace:*",
+    "@tanstack/react-form": "^1.1.0",
     "@taxel/domain": "workspace:*",
     "ag-grid-community": "^33.1.1",
     "ag-grid-react": "^33.1.1",

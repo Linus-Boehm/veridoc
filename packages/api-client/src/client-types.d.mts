@@ -52,13 +52,11 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                         Email: string;
                         MailboxHash: string;
                     }[];
-                    Cc: string;
                     CcFull: {
                         Name: string;
                         Email: string;
                         MailboxHash: string;
                     }[];
-                    Bcc: string;
                     BccFull: {
                         Name: string;
                         Email: string;
@@ -68,8 +66,6 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     ReplyTo: string;
                     Subject: string;
                     MessageID: string;
-                    TextBody: string;
-                    HtmlBody: string;
                     StrippedTextReply: string;
                     Tag: string;
                     Headers: {
@@ -83,6 +79,10 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                         Content: string;
                         ContentID: string;
                     }[];
+                    Cc?: string | undefined;
+                    Bcc?: string | undefined;
+                    TextBody?: string | undefined;
+                    HtmlBody?: string | undefined;
                 };
             } & {
                 param: {
@@ -193,24 +193,24 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                         matchedContent: string;
                         confidence: number;
                         currency: {
-                            amount: number;
                             currencyCode: string;
+                            amount: number;
                         };
                     } | undefined;
                     unitPrice?: {
                         matchedContent: string;
                         confidence: number;
                         currency: {
-                            amount: number;
                             currencyCode: string;
+                            amount: number;
                         };
                     } | undefined;
                     tax?: {
                         matchedContent: string;
                         confidence: number;
                         currency: {
-                            amount: number;
                             currencyCode: string;
+                            amount: number;
                         };
                     } | undefined;
                 }[];
@@ -218,16 +218,16 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     matchedContent: string;
                     confidence: number;
                     currency: {
-                        amount: number;
                         currencyCode: string;
+                        amount: number;
                     };
                 } | undefined;
                 totalTax?: {
                     matchedContent: string;
                     confidence: number;
                     currency: {
-                        amount: number;
                         currencyCode: string;
+                        amount: number;
                     };
                 } | undefined;
                 invoiceNumber?: {
@@ -264,8 +264,8 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     matchedContent: string;
                     confidence: number;
                     currency: {
-                        amount: number;
                         currencyCode: string;
+                        amount: number;
                     };
                 } | undefined;
                 customerTaxId?: {
@@ -357,24 +357,24 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                         matchedContent: string;
                         confidence: number;
                         currency: {
-                            amount: number;
                             currencyCode: string;
+                            amount: number;
                         };
                     } | undefined;
                     unitPrice?: {
                         matchedContent: string;
                         confidence: number;
                         currency: {
-                            amount: number;
                             currencyCode: string;
+                            amount: number;
                         };
                     } | undefined;
                     tax?: {
                         matchedContent: string;
                         confidence: number;
                         currency: {
-                            amount: number;
                             currencyCode: string;
+                            amount: number;
                         };
                     } | undefined;
                 }[];
@@ -382,16 +382,16 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     matchedContent: string;
                     confidence: number;
                     currency: {
-                        amount: number;
                         currencyCode: string;
+                        amount: number;
                     };
                 } | undefined;
                 totalTax?: {
                     matchedContent: string;
                     confidence: number;
                     currency: {
-                        amount: number;
                         currencyCode: string;
+                        amount: number;
                     };
                 } | undefined;
                 invoiceNumber?: {
@@ -428,8 +428,8 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     matchedContent: string;
                     confidence: number;
                     currency: {
-                        amount: number;
                         currencyCode: string;
+                        amount: number;
                     };
                 } | undefined;
                 customerTaxId?: {
@@ -473,9 +473,9 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 id: string;
                 name: string;
                 organizationId: string;
+                archivedAt: string | null;
                 postmarkServerId: number | null;
                 postmarkInboundEmail: string | null;
-                archivedAt: string | null;
             }[];
             outputFormat: "json";
             status: hono_utils_http_status.ContentfulStatusCode;
@@ -496,15 +496,201 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 id: string;
                 name: string;
                 organizationId: string;
+                archivedAt: string | null;
                 postmarkServerId: number | null;
                 postmarkInboundEmail: string | null;
-                archivedAt: string | null;
             };
             outputFormat: "json";
             status: hono_utils_http_status.ContentfulStatusCode;
         };
     };
 }, "/postboxes"> | hono_types.MergeSchemaPath<{
+    "/": {
+        $get: {
+            input: {};
+            output: {
+                name: string;
+                organizationId: string;
+                countryCode: string;
+                vatId?: string | undefined;
+                industryId?: string | undefined;
+                ext_vendor_number?: string | undefined;
+                createdAt: string;
+                updatedAt: string;
+                archivedAt: string | null;
+                id: string;
+                addresses?: {
+                    type: "billing" | "shipping" | "headquarters" | "branch" | "other";
+                    id: string;
+                    countryCode: string;
+                    isPrimary: boolean;
+                    addressLine1: string;
+                    postalCode: string;
+                    addressName?: string | undefined;
+                    addressLine2?: string | undefined;
+                    administrativeArea?: string | undefined;
+                    locality?: string | undefined;
+                }[] | undefined;
+                domains?: {
+                    domain: string;
+                    isPrimary: boolean;
+                    isVerified: boolean;
+                }[] | undefined;
+                bankAccounts?: {
+                    id: string;
+                    isPrimary: boolean;
+                    accountName: string;
+                    accountHolderName: string;
+                    iban?: string | undefined;
+                    bic?: string | undefined;
+                    bankName?: string | undefined;
+                    routingNumber?: string | undefined;
+                    accountNumber?: string | undefined;
+                    currencyCode?: string | undefined;
+                }[] | undefined;
+            }[];
+            outputFormat: "json";
+            status: hono_utils_http_status.ContentfulStatusCode;
+        };
+    };
+} & {
+    "/:companyId": {
+        $get: {
+            input: {
+                param: {
+                    companyId: string;
+                };
+            };
+            output: {
+                name: string;
+                organizationId: string;
+                countryCode: string;
+                vatId?: string | undefined;
+                industryId?: string | undefined;
+                ext_vendor_number?: string | undefined;
+                createdAt: string;
+                updatedAt: string;
+                archivedAt: string | null;
+                id: string;
+                addresses?: {
+                    type: "billing" | "shipping" | "headquarters" | "branch" | "other";
+                    id: string;
+                    countryCode: string;
+                    isPrimary: boolean;
+                    addressLine1: string;
+                    postalCode: string;
+                    addressName?: string | undefined;
+                    addressLine2?: string | undefined;
+                    administrativeArea?: string | undefined;
+                    locality?: string | undefined;
+                }[] | undefined;
+                domains?: {
+                    domain: string;
+                    isPrimary: boolean;
+                    isVerified: boolean;
+                }[] | undefined;
+                bankAccounts?: {
+                    id: string;
+                    isPrimary: boolean;
+                    accountName: string;
+                    accountHolderName: string;
+                    iban?: string | undefined;
+                    bic?: string | undefined;
+                    bankName?: string | undefined;
+                    routingNumber?: string | undefined;
+                    accountNumber?: string | undefined;
+                    currencyCode?: string | undefined;
+                }[] | undefined;
+            };
+            outputFormat: "json";
+            status: hono_utils_http_status.ContentfulStatusCode;
+        };
+    };
+} & {
+    "/": {
+        $post: {
+            input: {
+                json: {
+                    name: string;
+                    countryCode: string;
+                    vatId?: string | undefined;
+                    industryId?: string | undefined;
+                    ext_vendor_number?: string | undefined;
+                    addresses?: {
+                        type: "billing" | "shipping" | "headquarters" | "branch" | "other";
+                        countryCode: string;
+                        addressLine1: string;
+                        postalCode: string;
+                        isPrimary?: boolean | undefined;
+                        addressName?: string | undefined;
+                        addressLine2?: string | undefined;
+                        administrativeArea?: string | undefined;
+                        locality?: string | undefined;
+                    }[] | undefined;
+                    bankAccounts?: {
+                        accountName: string;
+                        accountHolderName: string;
+                        isPrimary?: boolean | undefined;
+                        iban?: string | undefined;
+                        bic?: string | undefined;
+                        bankName?: string | undefined;
+                        routingNumber?: string | undefined;
+                        accountNumber?: string | undefined;
+                        currencyCode?: string | undefined;
+                    }[] | undefined;
+                    domains?: {
+                        domain: string;
+                        isPrimary?: boolean | undefined;
+                        isVerified?: boolean | undefined;
+                    }[] | undefined;
+                };
+            };
+            output: {
+                name: string;
+                organizationId: string;
+                countryCode: string;
+                vatId?: string | undefined;
+                industryId?: string | undefined;
+                ext_vendor_number?: string | undefined;
+                createdAt: string;
+                updatedAt: string;
+                archivedAt: string | null;
+                id: string;
+                addresses?: {
+                    type: "billing" | "shipping" | "headquarters" | "branch" | "other";
+                    id: string;
+                    countryCode: string;
+                    isPrimary: boolean;
+                    addressLine1: string;
+                    postalCode: string;
+                    addressName?: string | undefined;
+                    addressLine2?: string | undefined;
+                    administrativeArea?: string | undefined;
+                    locality?: string | undefined;
+                }[] | undefined;
+                domains?: {
+                    domain: string;
+                    isPrimary: boolean;
+                    isVerified: boolean;
+                }[] | undefined;
+                bankAccounts?: {
+                    id: string;
+                    isPrimary: boolean;
+                    accountName: string;
+                    accountHolderName: string;
+                    iban?: string | undefined;
+                    bic?: string | undefined;
+                    bankName?: string | undefined;
+                    routingNumber?: string | undefined;
+                    accountNumber?: string | undefined;
+                    currencyCode?: string | undefined;
+                }[] | undefined;
+            };
+            outputFormat: "json";
+            status: hono_utils_http_status.ContentfulStatusCode;
+        };
+    };
+}, "/companies"> | hono_types.MergeSchemaPath<{
     "/": {
         $get: {
             input: {
@@ -519,6 +705,7 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 id: string;
                 date: string;
                 organizationId: string;
+                archivedAt: string | null;
                 postboxId: string;
                 from: string;
                 fromName: string;
@@ -529,7 +716,6 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 messageId: string;
                 bodyText: string;
                 bodyHtml: string;
-                archivedAt: string | null;
                 documents?: {
                     createdAt: string;
                     updatedAt: string;
@@ -552,9 +738,9 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     id: string;
                     name: string;
                     organizationId: string;
+                    archivedAt: string | null;
                     postmarkServerId: number | null;
                     postmarkInboundEmail: string | null;
-                    archivedAt: string | null;
                 } | undefined;
             }[];
             outputFormat: "json";
@@ -580,6 +766,7 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 id: string;
                 date: string;
                 organizationId: string;
+                archivedAt: string | null;
                 postboxId: string;
                 from: string;
                 fromName: string;
@@ -590,7 +777,6 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 messageId: string;
                 bodyText: string;
                 bodyHtml: string;
-                archivedAt: string | null;
                 documents?: {
                     createdAt: string;
                     updatedAt: string;
@@ -613,9 +799,9 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     id: string;
                     name: string;
                     organizationId: string;
+                    archivedAt: string | null;
                     postmarkServerId: number | null;
                     postmarkInboundEmail: string | null;
-                    archivedAt: string | null;
                 } | undefined;
             };
             outputFormat: "json";
@@ -637,6 +823,7 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 id: string;
                 date: string;
                 organizationId: string;
+                archivedAt: string | null;
                 postboxId: string;
                 from: string;
                 fromName: string;
@@ -647,7 +834,6 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                 messageId: string;
                 bodyText: string;
                 bodyHtml: string;
-                archivedAt: string | null;
                 documents?: {
                     createdAt: string;
                     updatedAt: string;
@@ -670,9 +856,9 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
                     id: string;
                     name: string;
                     organizationId: string;
+                    archivedAt: string | null;
                     postmarkServerId: number | null;
                     postmarkInboundEmail: string | null;
-                    archivedAt: string | null;
                 } | undefined;
             };
             outputFormat: "json";
