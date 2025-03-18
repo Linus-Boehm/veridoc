@@ -1,0 +1,2 @@
+CREATE TYPE "public"."email_status" AS ENUM('received', 'processed', 'partial_processed', 'failed', 'archived');--> statement-breakpoint
+ALTER TABLE "inbound_emails" ADD COLUMN "status" "email_status" DEFAULT 'received' NOT NULL;

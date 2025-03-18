@@ -1,0 +1,34 @@
+/* Style the drop shadow the pinned columns make, but only when center columns scroll under them */
+.pinnedColumns :global(.ag-header .ag-pinned-left-header.has-shadow),
+.pinnedColumns :global(.ag-body-viewport .ag-pinned-left-cols-container.has-shadow),
+.pinnedColumns :global(.ag-pinned-left-floating-bottom.has-shadow) {
+  position: relative;
+  z-index: calc(var(--grid-z-index-group) + 1);
+  box-shadow: var(--grid-shadow-left);
+}
+
+.pinnedColumns :global(.ag-sticky-top.has-shadow > .ag-pinned-left-sticky-top),
+.pinnedColumns :global(.ag-sticky-top.has-shadow > .ag-pinned-left-sticky-bottom) {
+  z-index: calc(var(--grid-z-index-group) + 1);
+  box-shadow: var(--grid-shadow-left);
+}
+
+.pinnedColumns :global(.ag-header .ag-pinned-left-header),
+.pinnedColumns :global(.ag-body-viewport .ag-pinned-left-cols-container),
+.pinnedColumns :global(.ag-pinned-left-floating-bottom) {
+  position: relative;
+  z-index: var(--grid-z-index-base);
+  box-shadow: var(--grid-shadow-left-subtle);
+}
+
+.pinnedColumns :global(.ag-pinned-left-sticky-top),
+.pinnedColumns :global(.ag-pinned-left-sticky-bottom) {
+  box-shadow: var(--grid-shadow-left-subtle);
+}
+
+.pinnedColumns :global(.ag-header .ag-pinned-right-header),
+.pinnedColumns :global(.ag-body-viewport .ag-pinned-right-cols-container) {
+  position: relative;
+  z-index: var(--grid-z-index-pinned);
+  box-shadow: var(--grid-shadow-right-subtle);
+}

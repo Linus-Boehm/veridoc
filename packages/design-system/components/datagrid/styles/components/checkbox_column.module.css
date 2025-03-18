@@ -1,0 +1,20 @@
+/* Specific styles related to the checkbox column */
+.checkbox :global([col-id='ag-Grid-ControlsColumn'].ag-header-cell) {
+  --ag-header-column-separator-display: none;
+}
+.checkbox :global([col-id='ag-Grid-ControlsColumn'].ag-cell) {
+  --ag-cell-horizontal-border: none;
+}
+.checkbox :global([col-id='ag-Grid-ControlsColumn'].ag-cell:focus-within) {
+  border-color: transparent;
+}
+/* Fix roundedness of checkbox box-shadow to match our svg checkbox icons */
+.checkbox :global(.ag-checkbox-input-wrapper) {
+  border-radius: 4px;
+}
+
+.checkbox :global([col-id='ag-Grid-ControlsColumn'].ag-cell.ag-cell-range-selected-1),
+.checkbox :global([col-id='ag-Grid-ControlsColumn'].ag-cell.ag-cell-range-selected) {
+  background-color: transparent !important;
+  border-color: transparent;
+}

@@ -1,0 +1,47 @@
+.interactive :global(.ag-cell.editable-grid-cell-invalid) {
+  /* padding-left: 0; */
+  border-radius: 4px;
+  border: 1px solid var(--grid-color-error) !important;
+  /* outline: var(--grid-color-error) !important; */
+  background-color: var(--grid-color-error-light) !important;
+}
+
+.interactive :global(.ag-cell.editable-grid-cell-invalid:focus > .cell-expand-grid-cell) {
+  border: 1px solid var(--grid-color-error);
+  background-color: var(--grid-color-error-light);
+}
+
+.interactive :global(.ag-cell.ag-cell-range-selected.editable-grid-cell-invalid > .cell-expand-grid-cell) {
+  background-color: var(--grid-color-primary-very-light);
+}
+
+.interactive {
+  --ag-borders-input-invalid: solid 1px;
+  --ag-input-border-color-invalid: var(--grid-color-error);
+}
+
+.interactive :global(.ag-select-list) {
+  border-radius: 0.375rem;
+  border-color: var(--grid-color-border);
+  background-color: var(--grid-color-background);
+  box-shadow: var(--boxShadow-md);
+  padding: 0.5rem 0.375rem;
+}
+
+.interactive :global(.ag-select-list-item) {
+  padding: 0.375rem 0.5rem;
+  display: flex;
+  align-items: center;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+.interactive :global(.ag-select-list-item:focus) {
+  background-color: var(--grid-color-primary-very-light);
+  color: var(--grid-color-foreground);
+}
+
+.interactive :global(.ag-select-list-item:not(:last-child)) {
+  border-bottom: var(--grid-color-border);
+}

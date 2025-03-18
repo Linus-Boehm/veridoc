@@ -1,0 +1,16 @@
+/* suppress the cell expansion when a range of cells is selected */
+.selection :global(.ag-cell.ag-cell-range-top .cell-expand-grid-cell),
+.selection :global(.ag-cell.ag-cell-range-bottom .cell-expand-grid-cell) {
+  width: 100%;
+  max-height: 31px;
+  border-radius: 0;
+  border-style: dashed;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+/* disables wrapping for multi select cells when a range of cells is selected */
+.selection :global(.ag-cell.ag-cell-range-top .cell-expand-badge),
+.selection :global(.ag-cell.ag-cell-range-bottom .cell-expand-badge) {
+  flex-wrap: nowrap;
+}

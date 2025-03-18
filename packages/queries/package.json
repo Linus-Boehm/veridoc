@@ -1,0 +1,29 @@
+{
+  "name": "@taxel/queries",
+  "version": "0.0.0",
+  "private": true,
+  "scripts": {
+    "clean": "git clean -xdf .cache .turbo dist node_modules",
+    "typecheck": "tsc --noEmit --emitDeclarationOnly false"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*",
+    "@taxel/domain": "workspace:*",
+    "@types/node": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "typescript": "catalog:",
+    "vitest": "catalog:",
+    "hono": "catalog:",
+    "@taxel/api-client": "catalog:",
+    "@t3-oss/env-nextjs": "catalog:"
+  },
+  "imports": {
+    "#*": "./*"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "catalog:",
+    "@taxel/api-client": "workspace:*",
+    "@repo/auth": "workspace:*",
+    "zod": "catalog:"
+  }
+}

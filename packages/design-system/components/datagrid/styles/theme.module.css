@@ -1,0 +1,53 @@
+.theme {
+  /* Core theme variables */
+  --ag-foreground-color: var(--grid-color-foreground);
+  --ag-background-color: var(--grid-color-background);
+  --ag-odd-row-background-color: var(--grid-color-background);
+  --ag-border-color: var(--grid-color-border);
+  --ag-secondary-border-color: var(--grid-color-border);
+  --ag-alpine-active-color: var(--grid-color-border);
+
+  /* Icons */
+  --ag-icon-font-code-menu: var(--grid-icon-menu);
+  --ag-icon-font-code-checkbox-checked: var(--grid-icon-checkbox-checked);
+  --ag-icon-font-code-checkbox-unchecked: var(--grid-icon-checkbox-unchecked);
+  --ag-icon-font-code-checkbox-indeterminate: var(--grid-icon-checkbox-indeterminate);
+
+  /* Typography */
+  --ag-font-size: var(--grid-font-size);
+  --ag-font-family: var(--grid-font-family);
+
+  /* Theme colors */
+  --ag-range-selection-border-color: var(--grid-color-primary-light);
+  --ag-selected-row-background-color: var(--grid-color-hover);
+  --ag-row-hover-color: var(--grid-color-hover);
+  --ag-range-selection-background-color: var(--grid-color-primary-very-light);
+
+  /* Layout */
+  --ag-row-height: var(--grid-row-height);
+  --ag-header-height: var(--grid-header-height);
+}
+
+.theme :global(.ag-root-wrapper) {
+  border: none;
+}
+
+.theme :global(.ag-menu-separator-part::after) {
+  border-top: var(--ag-borders-critical) rgba(234, 236, 240, 1);
+}
+
+.theme :global(.ag-icon-tick) {
+  --ag-icon-font-color-tick: var(--grid-color-primary);
+}
+
+.theme :global(.ag-status-bar) {
+  min-height: theme(height.12);
+}
+
+.theme :global(.ag-theme-alpine) {
+  --ag-card-radius: theme(borderRadius.md);
+  --ag-control-panel-background-color: var(--grid-color-background);
+  --ag-popup-shadow: var(--boxShadow-md);
+  --ag-menu-border-color: var(--grid-color-border);
+  --ag-font-family: var(--grid-font-family);
+}

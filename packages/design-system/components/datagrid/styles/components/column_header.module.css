@@ -1,0 +1,29 @@
+.columnHeader {
+  --ag-header-foreground-color: var(--grid-color-foreground);
+  --ag-header-background-color: var(--grid-color-header-bg);
+  --ag-header-column-separator-display: block;
+  --ag-header-column-separator-width: 1px;
+  --ag-header-column-separator-color: var(--grid-color-border);
+
+  /* Column resize handle deactivated */
+  --ag-header-column-resize-handle-display: none;
+}
+
+/* header font size should be the same as the general one */
+.columnHeader :global(.ag-header-cell-text) {
+  font-size: var(--grid-font-size);
+}
+
+.columnHeader :global(.header-group-table-small-right-separator.ag-header-cell::before) {
+  top: calc(var(--grid-size-header-height) * 1.25);
+  height: 25%;
+}
+
+
+.columnHeader :global(.ag-header-cell:has(+ .kebab-menu-column-header)::before) {
+  visibility: hidden;
+}
+
+.columnHeader :global(.ag-header-cell.kebab-menu-column-header::before) {
+  visibility: hidden;
+}

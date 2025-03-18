@@ -1,0 +1,20 @@
+/* values in the first columns should be left aligned, padding in other columns should be done in child cells */
+.footerRow :global(.ag-floating-bottom .ag-cell:has(.leading-normal)) {
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.footerRow :global(.ag-floating-bottom .ag-cell) {
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: right;
+}
+
+.footerRow :global(.ag-floating-bottom-viewport .ag-cell:focus > .cell-expand-grid-cell) {
+  justify-content: right;
+}
+
+.footerRow :global(.ag-cell:focus > .cell-expand-grid-cell.cell-expansion-no-padding-left) {
+  padding-left: 0;
+}

@@ -1,0 +1,1 @@
+ALTER TABLE "invoice_items" ALTER COLUMN "taxRate" SET DATA TYPE text;

@@ -1,5 +1,5 @@
 import { z } from 'zod';
-import { Entity, timestampDTOSchema, type Timestamps, timestampsSchema } from '#base.ts';
+import { Entity, type Timestamps, timestampDTOSchema } from '#base.ts';
 
 export const processingStatusSchema = z.enum([
   'waiting_for_upload',
@@ -90,6 +90,14 @@ export class Document extends Entity<BaseDocument> {
 
   getOrganizationId() {
     return this.props.organizationId;
+  }
+
+  getEmailId(): string | undefined {
+    return this.props.emailId;
+  }
+
+  getProcessingStatus(): ProcessingStatus {
+    return this.props.processingStatus;
   }
 
   toJSON(): DocumentDTO {

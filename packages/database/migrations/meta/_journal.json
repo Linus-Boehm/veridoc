@@ -64,6 +64,13 @@
       "when": 1742158559986,
       "tag": "0008_email-archiving",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1742222170239,
+      "tag": "0009_email-status",
+      "breakpoints": true
     }
   ]
 }

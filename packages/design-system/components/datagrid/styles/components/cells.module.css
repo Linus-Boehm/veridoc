@@ -1,0 +1,36 @@
+.cells {
+  --ag-cell-horizontal-padding: var(--grid-cell-padding);
+  --ag-cell-horizontal-border: solid var(--grid-color-border);
+}
+
+.cells :global(.ag-cell.editable-grid-cell-invalid) {
+  border-radius: 4px;
+  border: 1px solid var(--grid-color-error) !important;
+  background-color: var(--grid-color-error-light) !important;
+}
+
+.cells :global(.ag-cell.editable-grid-cell-invalid.ag-cell-range-selected) {
+  background-color: var(--grid-color-primary-very-light) !important;
+}
+
+/* Highlighting of Quick Filter matches */
+.cells :global(.highlight-quick-filter-matches) {
+  background-color: var(--grid-color-primary-very-light);
+}
+
+.cells :global(.ag-cell.flex.justify-end.number-column-right-aligned) {
+  justify-content: flex-end;
+  display: flex;
+}
+
+.cells :global(.ag-tooltip-custom.ag-tooltip-animate) {
+  transition: none !important;
+}
+
+.cells :global(.ag-cell:has(.column-no-right-separator)) {
+  border-right: none !important;
+}
+
+.cells :global(.ag-cell:has(.column-no-left-separator)) {
+  border-left: none !important;
+}

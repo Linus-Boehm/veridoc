@@ -515,6 +515,7 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
             output: {
                 createdAt: string;
                 updatedAt: string;
+                status: "received" | "failed" | "processed" | "partial_processed" | "archived";
                 id: string;
                 date: string;
                 organizationId: string;
@@ -575,6 +576,7 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
             output: {
                 createdAt: string;
                 updatedAt: string;
+                status: "received" | "failed" | "processed" | "partial_processed" | "archived";
                 id: string;
                 date: string;
                 organizationId: string;
@@ -631,6 +633,7 @@ declare const router: hono_hono_base.HonoBase<{}, hono_types.BlankSchema | hono_
             output: {
                 createdAt: string;
                 updatedAt: string;
+                status: "received" | "failed" | "processed" | "partial_processed" | "archived";
                 id: string;
                 date: string;
                 organizationId: string;

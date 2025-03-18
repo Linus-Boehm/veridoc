@@ -72,6 +72,14 @@ export const documentProcessingStatus = pgEnum('document_processing_status', [
   'failed',
 ]);
 
+export const emailStatus = pgEnum('email_status', [
+  'received',
+  'processed',
+  'partial_processed',
+  'failed',
+  'archived',
+]);
+
 export const documentTypes = pgEnum('document_types', [
   'invoice',
   'receipt',
@@ -306,7 +314,8 @@ export const inboundEmails = pgTable(
     messageId: text().notNull(),
     bodyText: text().notNull(),
     bodyHtml: text().notNull(),
-    date: date().notNull(),
+    date: timestamp({ withTimezone: true }).notNull(),
+    status: emailStatus().notNull().default('received'),
     ...timestamps,
     ...softDeletion,
   },
@@ -405,14 +414,17 @@ export const postboxesRelations = relations(postboxes, ({ one, many }) => ({
   inboundEmails: many(inboundEmails),
 }));
 
-export const inboundEmailsRelations = relations(inboundEmails, ({ one, many }) => ({
-  postbox: one(postboxes, {
-    fields: [inboundEmails.postboxId],
-    references: [postboxes.id],
-  }),
-  organization: one(organizations, {
-    fields: [inboundEmails.organizationId],
-    references: [organizations.id],
-  }),
-  documents: many(documents),
-}));
+export const inboundEmailsRelations = relations(
+  inboundEmails,
+  ({ one, many }) => ({
+    postbox: one(postboxes, {
+      fields: [inboundEmails.postboxId],
+      references: [postboxes.id],
+    }),
+    organization: one(organizations, {
+      fields: [inboundEmails.organizationId],
+      references: [organizations.id],
+    }),
+    documents: many(documents),
+  })
+);

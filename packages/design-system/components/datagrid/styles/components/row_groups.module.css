@@ -1,0 +1,65 @@
+/* QuickFix for row-groups: move row group "up" so that interactivity isn't blocked by the drop-shadow of the outer container */
+/* If we would not apply this, the drop shadow pinned columns would go across the row headers. */
+/* We should probably remove the pinned-columns-drop-shadows. If we do so, this needs to go as well. */
+.rowGroups :global(.ag-row-group) {
+  z-index: var(--grid-z-index-group);
+}
+
+/* If this is removed the gray background of selected parent row hides the tag*/
+.rowGroups :global(.ag-row-group.ag-row-selected:has(.preserve-group-renderer)::before),
+.rowGroups :global(.ag-row-level-1.ag-row-selected:has(.preserve-group-renderer)::before) {
+  content: none;
+}
+
+.rowGroups :global(.ag-row-group.ag-row-selected:has(.preserve-group-renderer)),
+.rowGroups :global(.ag-row-level-1.ag-row-selected:has(.preserve-group-renderer)) {
+  background-color: var(--ag-row-hover-color);
+}
+
+/* Place checkbox of grouprowcells on the left side, before the chevron and the content*/
+.rowGroups :global(.ag-row-level-0 .ag-row-group .ag-group-checkbox) {
+  order: 0;
+}
+
+.rowGroups :global(.ag-row-level-0 .ag-row-group .ag-group-expanded),
+.rowGroups :global(.ag-row-level-0 .ag-row-group .ag-group-contracted),
+.rowGroups :global(.ag-row-level-0 .ag-row-group .ag-group-value) {
+  order: 1;
+}
+
+/* Auto generated group column */
+.rowGroups :global([col-id='ag-Grid-AutoColumn'].ag-header-cell) {
+  --ag-header-column-separator-display: none;
+}
+.rowGroups :global([col-id='ag-Grid-AutoColumn'].ag-cell) {
+  --ag-cell-horizontal-border: none;
+  padding: 0;
+}
+.rowGroups :global([col-id='ag-Grid-AutoColumn'].ag-cell:focus-within) {
+  border: 1px solid transparent;
+}
+.rowGroups :global([col-id='ag-Grid-AutoColumn'] .ag-icon:hover) {
+  color: var(--grid-icon-hover);
+}
+
+/* remove border between child rows in group row, only applies if flag is set on datagrid creation */
+.rowGroups :global(.ag-row.remove-horizontal-border-in-row-group.ag-row-level-0) {
+  border-bottom: transparent;
+}
+
+.rowGroups :global(.ag-row.remove-horizontal-border-in-row-group.ag-row-level-1) {
+  border-bottom: transparent;
+}
+
+.rowGroups :global(.ag-row.ag-row-level-0 + .ag-row.remove-horizontal-border-in-row-group.ag-row-level-0) {
+  border-top: 1px solid var(--ag-row-border-color);
+}
+.rowGroups :global(.ag-row.ag-row-level-1 + .ag-row.remove-horizontal-border-in-row-group.ag-row-level-0) {
+  border-top: 1px solid var(--ag-row-border-color);
+}
+
+.rowGroups :global([col-id='ag-Grid-AutoColumn'].ag-cell.ag-cell-range-selected-1),
+.rowGroups :global([col-id='ag-Grid-AutoColumn'].ag-cell.ag-cell-range-selected) {
+  background-color: transparent !important;
+  border-color: transparent;
+}

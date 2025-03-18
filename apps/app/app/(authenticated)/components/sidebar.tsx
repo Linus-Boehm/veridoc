@@ -39,9 +39,11 @@ import {
   AnchorIcon,
   BookOpenIcon,
   BotIcon,
+  Building2Icon,
   ChevronRightIcon,
   FolderIcon,
   FrameIcon,
+  InboxIcon,
   LifeBuoyIcon,
   MoreHorizontalIcon,
   PieChartIcon,
@@ -67,6 +69,11 @@ const data = {
   },
   navMain: [
     {
+      title: 'Postfach',
+      url: '/inbox',
+      icon: InboxIcon,
+    },
+    {
       title: 'Rechnungen',
       url: '/invoices',
       icon: SquareTerminalIcon,
@@ -86,31 +93,11 @@ const data = {
         },
       ],
     },
+
     {
-      title: 'Konversationen',
-      url: '/inbox',
-      icon: BotIcon,
-      items: [
-        {
-          title: 'Alle Konversationen',
-          url: '/inbox',
-        },
-      ],
-    },
-    {
-      title: 'Kreditoren',
-      url: '/suppliers',
-      icon: BookOpenIcon,
-      items: [
-        {
-          title: 'Firmen',
-          url: '/suppliers/companies',
-        },
-        {
-          title: 'Kontakte',
-          url: '/suppliers/contacts',
-        },
-      ],
+      title: 'Firmen',
+      url: '/companies',
+      icon: Building2Icon,
     },
     {
       title: 'Settings',

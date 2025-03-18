@@ -1,0 +1,52 @@
+.variables {
+  /* Colors */
+  --grid-color-foreground: theme(colors.gray.800);
+  --grid-color-background: theme(colors.white);
+  --grid-color-border: theme(colors.gray.200);
+  --grid-color-error-dark: theme(colors.error.600);
+  --grid-color-error: theme(colors.error.300);
+  --grid-color-error-light: theme(colors.error.100);
+  --grid-color-warning: theme(colors.warning.100);
+  --grid-color-hover: theme(colors.gray.100);
+  --grid-color-primary: theme(colors.primary.600);
+  --grid-color-primary-light: theme(colors.primary.300);
+  --grid-color-primary-very-light: theme(colors.primary.50);
+  --grid-color-primary-very-very-light: rgb(248, 248, 255);
+  --grid-color-header-bg: theme(colors.gray.50);
+  --grid-icon-hover: theme(colors.gray.500);
+
+  /* Icons */
+  --grid-icon-menu: url('/static/images/icons/datagrid/MenuAlt.png');
+  --grid-icon-checkbox-checked: url('/static/images/icons/datagrid/CheckboxChecked.svg');
+  --grid-icon-checkbox-unchecked: url('/static/images/icons/datagrid/CheckboxUnchecked.svg');
+  --grid-icon-checkbox-indeterminate: url('/static/images/icons/datagrid/CheckboxIndeterminate.svg');
+
+  /* Typography */
+  --grid-font-size: theme(fontSize.xs);
+  --grid-font-family: theme(fontFamily.sans);
+
+  /* Dimensions */
+  --grid-size-row-height: theme(height.8);
+  --grid-size-header-height: theme(height.8);
+  --grid-size-cell-padding: theme(spacing.2);
+
+  /* Layout */
+  --grid-row-height: theme(height.8);
+  --grid-header-height: theme(height.8);
+  --grid-cell-padding: theme(spacing.2);
+  --grid-expanded-cell-max-width: 285px;
+  --grid-expanded-cell-max-height: 135px;
+
+  /* Shadows */
+  --grid-shadow-left: 12px 0px 16px -4px rgba(16, 24, 40, 0.08), 4px 0px 6px -2px rgba(16, 24, 40, 0.03);
+  --grid-shadow-right-subtle: -3px 0px 6px -2px rgba(16, 24, 40, 0.08);
+  --grid-shadow-left-subtle: 3px 0px 6px -2px rgba(16, 24, 40, 0.05);
+  --boxShadow-sm: theme(boxShadow.sm);
+  --boxShadow-md: theme(boxShadow.md);
+
+  /* Z-indices */
+  --grid-z-index-base: 1;
+  --grid-z-index-pinned: 2;
+  --grid-z-index-group: 3;
+  --grid-z-index-focused: 10;
+}

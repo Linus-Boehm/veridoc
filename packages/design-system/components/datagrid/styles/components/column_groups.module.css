@@ -1,0 +1,66 @@
+/* === Cells === */
+.columnGroups :global(.ag-cell.ag-column-last.column-in-group-right-separator:not(.ag-cell-focus)),
+.columnGroups :global(.ag-cell.column-in-group-no-separator:not(.ag-cell-range-selected)) {
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+/* === Header === */
+/* If there are column groups we only want borders between the groups */
+.columnGroups :global(.ag-header-cell.column-in-group-small-separator) {
+  --ag-header-column-separator-display: solid;
+  --ag-header-column-separator-height: 50%;
+  --ag-header-column-separator-width: 1px;
+  --ag-borders: none;
+  --ag-borders-critical: none;
+}
+
+.columnGroups :global(.ag-header-cell.column-in-group-right-separator) {
+  --ag-header-column-separator-display: solid;
+  --ag-header-column-separator-height: 100%;
+  --ag-header-column-separator-width: 1px;
+  --ag-borders: none;
+  --ag-borders-critical: none;
+}
+
+.columnGroups :global(.ag-header-group-cell.column-in-group-right-separator) {
+  --ag-header-column-separator-display: none;
+}
+
+.columnGroups :global(.ag-header-cell.ag-column-last.column-in-group-right-separator) {
+  --ag-header-column-separator-display: solid;
+  --ag-header-column-separator-height: 50%;
+  --ag-header-column-separator-width: 1px;
+}
+
+/* Bottom alignes header text if column groups are used in same grid */
+.columnGroups
+  :global(
+    .header-bottom-aligned-ungrouped
+      .ag-header-cell-comp-wrapper
+      .ag-cell-label-container
+      .ag-header-cell-label
+  ) {
+  padding-bottom: 3px;
+  align-items: flex-end;
+}
+
+/* Right alignes group header if child headers are right aligned */
+.columnGroups :global(.ag-header-group-cell.right-aligned-header .ag-header-cell-comp-wrapper) {
+  justify-content: flex-end;
+}
+
+/* Bottom alignes checkbox if column groups are used in same grid */
+.columnGroups :global(.header-checkbox-bottom-aligned-ungrouped) {
+  padding-bottom: 6px;
+  align-items: flex-end;
+}
+
+.columnGroups :global(.ag-header-group-cell.ag-column-last) {
+  --ag-header-column-separator-display: none;
+}
+
+.columnGroups :global(.column-in-group-right-separator.ag-column-last) {
+  border-right: var(--ag-cell-horizontal-border);
+  border-right-width: 1px;
+}

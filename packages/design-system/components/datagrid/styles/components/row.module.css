@@ -1,0 +1,4 @@
+/* font size in row should be consistent */
+.row :global(.ag-row) {
+  font-size: calc(var(--grid-font-size));
+}

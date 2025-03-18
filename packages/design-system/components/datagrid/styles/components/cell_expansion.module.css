@@ -1,0 +1,83 @@
+/* QuickFix for row-groups: focused cell should be elevated to make Cell Expansion work*/
+.cellExpansion :global(.ag-row:has(.ag-cell:focus)) {
+  z-index: var(--grid-z-index-focused);
+}
+
+/* Cell content should overflow to the right when the cell is not focused -> indicating it should be focused to see what is there */
+.cellExpansion :global(.ag-cell:has(.cell-expand-grid-cell)) {
+  padding-right: 0;
+}
+
+/* Apply Focus styling to all cells except checkbox column cells. */
+.cellExpansion :global(.ag-cell:not(:has(.ag-selection-checkbox)):focus) {
+  z-index: var(--grid-z-index-focused);
+  padding: 0;
+  border: none;
+  overflow: visible;
+}
+
+/* Class `cell-expand-grid-cell` is applied to the wrapping element of all grid cells*/
+/* These are styles applied to the container element, base state */
+.cellExpansion :global(.cell-expand-grid-cell) {
+  display: flex;
+  align-items: center;
+  min-height: 100% !important;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* These are styles applied to the container element, focused state */
+.cellExpansion :global(.ag-cell:focus > .cell-expand-grid-cell) {
+  background-color: var(--grid-color-primary-very-very-light);
+  border: 1px solid var(--grid-color-primary-light);
+  position: absolute;
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 100%;
+  max-width: var(--grid-expanded-cell-max-width);
+  max-height: var(--grid-expanded-cell-max-height);
+  overflow-x: hidden;
+  overflow-y: auto;
+  border-radius: 4px;
+  padding: 1px 7px;
+  background-color: var(--grid-color-primary-very-very-light);
+  white-space: normal;
+  border: 1px solid var(--grid-color-primary-light);
+}
+
+/* Badge/Tag group: wrap elements when cell is expanding */
+.cellExpansion :global(.ag-cell:focus .cell-expand-badge),
+.cellExpansion :global(.ag-cell:focus .cell-expand-tag) {
+  flex-wrap: wrap;
+  padding-top: 2.5px;
+  padding-bottom: 2.5px;
+}
+
+/* Badge/Tag single: _unfocused_ cells that contain a single badge or tag */
+/* A single badge/tag is never cut off but shrinks to fit and needs proper padding applied */
+.cellExpansion :global(.ag-cell:not(:focus) .tacto-single-badge-tag) {
+  padding-right: 7px;
+}
+
+/* Badge: Ensure, very large badges truncate in the expanded cell */
+.cellExpansion :global(.ag-cell:focus .cell-badge) {
+  max-width: 100%;
+}
+
+/* Text cell content: Expands slightly wider than other cells for better readability */
+.cellExpansion :global(.ag-cell:focus .cell-expand-text) {
+  width: max-content;
+  max-width: 300px;
+  min-width: 100%;
+}
+
+/* Right-aligned content (Document, numbers, dates) */
+.cellExpansion :global(.ag-cell:focus > .cell-expand-grid-cell:has(.cell-expand-right-aligned-content)) {
+  padding: 0;
+  padding-left: 7px;
+  white-space: nowrap;
+}
+
+.cellExpansion :global(.ag-cell:focus > .cell-expand-grid-cell:has(.bar-chart-cell-expansion)) {
+  justify-content: flex-end;
+}
