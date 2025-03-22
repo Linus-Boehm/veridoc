@@ -1,7 +1,7 @@
 import { zValidator } from '@hono/zod-validator';
 import { Hono } from 'hono';
 import { inngest } from '#src/service/jobs/inngest/client.ts';
-import { emailBodySchema } from '#src/service/jobs/inngest/events.ts';
+import { emailBodySchema } from '#src/service/inboundEmails/inboundEmail.ts';
 
 
 

@@ -3,6 +3,7 @@ import { BaseDocument, Document } from "@taxel/domain/src/document";
 import type { Timestamps } from "@taxel/domain/src/base";
 import { mapTimestampsToDomain } from "../type-mappers";
 import { removeTimestamps } from "../type-mappers";
+
 export const mapDocumentToDomain = (document: SelectDocument): Document => {
   const timestamps: Timestamps = mapTimestampsToDomain(document);
   const doc: BaseDocument = {

@@ -36,4 +36,3 @@ export type SelectIndustry = typeof industries.$inferSelect;
 
 export type InsertAddress = typeof addresses.$inferInsert;
 export type SelectAddress = typeof addresses.$inferSelect;
-

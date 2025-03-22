@@ -5,11 +5,11 @@ import { extractDocumentSchema } from './inngest/events';
 export const documentActionsExtract = inngest.createFunction(
   { id: 'documents/actions/extract' },
   { event: 'documents/actions/extract' },
-  async ({ event: rawEvent, step, env }) => {
+  async ({ event: rawEvent, step }) => {
     const event = extractDocumentSchema.parse(rawEvent);
 
     const service = new DocumentProcessingService();
 
-    await service.extractDocument(event.data.documentId);
+    await service.processInvoice(event.data.documentId);
   }
 );

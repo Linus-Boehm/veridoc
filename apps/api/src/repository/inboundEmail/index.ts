@@ -3,7 +3,7 @@ import { type SQL, and, eq, gt, isNull } from '@repo/database/client';
 import { inboundEmails } from '@repo/database/schema';
 import type { EmailStatus, InboundEmail } from '@taxel/domain/src/inboundEmail';
 import type { Pagination } from '../base';
-import { mapInboundEmailToDomain } from './type-mapper';
+import { mapInboundEmailToDb, mapInboundEmailToDomain } from './type-mapper';
 
 export interface FindInboundEmailByIdOptions {
   organizationId?: string;
@@ -16,6 +16,15 @@ export interface ListInboundEmailsOptions {
 }
 
 export class InboundEmailRepository {
+  async create(inboundEmail: InboundEmail): Promise<InboundEmail> {
+    const result = await database
+      .insert(inboundEmails)
+      .values(mapInboundEmailToDb(inboundEmail))
+      .returning();
+    return mapInboundEmailToDomain(result[0]);
+  }
+
+  
   async findById(
     id: string,
     opts: FindInboundEmailByIdOptions = {}

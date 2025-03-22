@@ -77,7 +77,7 @@ const newDocumentIntelligenceClient = () => {
   );
 };
 
-export const extractDocumentFromUrl = async (
+export const extractInvoiceFromUrl = async (
   url: string,
   organizationId: string,
   documentId: string

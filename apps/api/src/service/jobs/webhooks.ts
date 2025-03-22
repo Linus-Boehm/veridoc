@@ -1,135 +1,124 @@
-import { getSignedPutUrl } from '@repo/storage/server';
-import { Document } from '@taxel/domain/src/document';
-import { InboundEmail } from '@taxel/domain/src/inboundEmail';
 import { NonRetriableError } from 'inngest';
-import { v7 as uuidv7 } from 'uuid';
-import { DocumentRepository } from '#src/repository/document/index.ts';
-import { EmailRepository } from '#src/repository/email/index.ts';
-import { PostboxRepository } from '#src/repository/postbox/index.ts';
+import { InboundEmailRepository } from '../../repository/inboundEmail';
 import { DocumentProcessingService } from '../documents/processing';
+import {
+  type InboundEmailEvent,
+  InboundEmailService,
+  inboundEmailSchema,
+} from '../inboundEmails/inboundEmail';
 import { inngest } from './inngest/client';
-import { type InboundEmailEvent, inboundEmailSchema } from './inngest/events';
-// Helper function to decode base64 content to Buffer
-const decodeBase64 = (base64String: string): Buffer => {
-  return Buffer.from(base64String, 'base64');
-};
 
 export const inboundEmail = inngest.createFunction(
   { id: 'webhooks/inbound-email' },
   { event: 'webhooks/inbound-email' },
   async ({ event: rawEvent, step, logger }) => {
-    const { email, body, organizationId } = await step.run(
+    const documentProcessing = new DocumentProcessingService();
+    const emailService = new InboundEmailService();
+    let event: InboundEmailEvent;
+    try {
+      event = inboundEmailSchema.parse(rawEvent);
+    } catch (error) {
+      throw new NonRetriableError('Invalid event', {
+        cause: error,
+      });
+    }
+    /*
+     * This step will create the initial email record
+     */
+    const { emailId, postboxId, organizationId } = await step.run(
       'process-email',
       async () => {
-        let event: InboundEmailEvent;
-        try {
-          event = inboundEmailSchema.parse(rawEvent);
-        } catch (error) {
-          throw new NonRetriableError('Invalid event', {
-            cause: error,
-          });
+        // Add debugging to see what's in the email data
+        logger.info('Processing email with data', {
+          textBody: event.data.emailJson.TextBody,
+          textBodyType: typeof event.data.emailJson.TextBody,
+          hasTextBody: 'TextBody' in event.data.emailJson,
+        });
+
+        // Make sure TextBody exists and is a string before processing
+        if (
+          event.data.emailJson.TextBody === null ||
+          event.data.emailJson.TextBody === undefined
+        ) {
+          event.data.emailJson.TextBody = '';
         }
 
-        const postBoxId = event.data.postBoxId;
-        const body = event.data.emailJson;
-        const postboxRepo = new PostboxRepository();
-        const postbox = await postboxRepo.findById(postBoxId);
-        if (!postbox) {
-          throw new Error(`Postbox not found: ${postBoxId}`);
-        }
-        const postboxdata = postbox.toJSON();
-        if (postboxdata.postmarkInboundEmail !== body.To) {
-          throw new Error(
-            `Invalid postbox ${body.To} does not match ${postBoxId}`
-          );
-        }
+        const { postbox, email } = await emailService.processEmail(event);
 
-        const organizationId = postboxdata.organizationId;
-
-        const emailRepo = new EmailRepository();
-        const email = await emailRepo.create(
-          new InboundEmail({
-            organizationId: organizationId,
-            postboxId: postbox.id,
-            from: body.From,
-            fromName: body.FromName,
-            to: body.To,
-            cc: body.Cc || '',
-            bcc: body.Bcc || '',
-            subject: body.Subject,
-            messageId: body.MessageID,
-            bodyText: body.TextBody || '',
-            bodyHtml: body.HtmlBody || '',
-            date: body.Date,
-            status: 'received',
-          })
-        );
         logger.info('Email created', { emailId: email.id });
 
         return {
-          email,
-          body,
-          organizationId,
+          emailId: email.id,
+          postboxId: postbox.id,
+          organizationId: postbox.toJSON().organizationId,
         };
       }
     );
-    logger.info('Email processed', { emailId: email.id });
 
-    const uploadSteps = body.Attachments.map(async (attachment) =>
-      step.run('upload-attachments', async () => {
-        logger.info('Processing attachment', {
-          emailId: email.id,
-          attachmentName: attachment.Name,
-        });
-        const documentRepo = new DocumentRepository();
-        const key = `${organizationId}/${uuidv7()}/${attachment.Name}`;
-        const putUrl = await getSignedPutUrl(key);
-        const fileContent = decodeBase64(attachment.Content);
-        const response = await fetch(putUrl, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': attachment.ContentType,
-            'Content-Length': attachment.ContentLength.toString(),
-          },
-          body: fileContent,
-        });
-        if (!response.ok) {
-          logger.error('Failed to upload attachment', {
-            emailId: email.id,
+    const uploadSteps = event.data.emailJson.Attachments.map(
+      async (attachment) => {
+        const document = await step.run('upload-attachments', async () => {
+          logger.info('Processing attachment', {
+            emailId: emailId,
             attachmentName: attachment.Name,
-            response,
           });
-          throw new Error(`Failed to upload attachment ${attachment.Name}`);
-        }
-        logger.info('Attachment uploaded', {
-          emailId: email.id,
-          attachmentName: attachment.Name,
+
+          // Get the InboundEmail directly from the repository
+          const emailRepo = new InboundEmailRepository();
+          const freshEmail = await emailRepo.findById(emailId, {
+            organizationId: organizationId,
+          });
+
+          if (!freshEmail) {
+            throw new Error(`Email not found: ${emailId}`);
+          }
+
+          const document = await documentProcessing.createFromEmailAttachment(
+            attachment,
+            emailId,
+            organizationId
+          );
+          logger.info('Document created', {
+            emailId: emailId,
+            documentId: document.id,
+          });
+          return document;
         });
 
-        const doc = await documentRepo.create(
-          new Document({
-            organizationId: organizationId,
-            emailId: email.id,
-            fileName: attachment.Name,
-            storagePath: key,
-            type: 'unknown',
-            processingStatus: 'processing',
-          })
-        );
-        logger.info('Document created', {
-          emailId: email.id,
-          documentId: doc.id,
+        const classifiedDocument = await step.run('document-ocr', async () => {
+          const service = new DocumentProcessingService();
+
+          const extraction = await service.extractGenericDocument(
+            document.id,
+            attachment
+          );
+          return await service.classifyDocument(extraction);
         });
-        const service = new DocumentProcessingService();
-        const invoice = await service.extractDocument(doc.id);
-        logger.info('Invoice extracted', {
-          emailId: email.id,
-          documentId: doc.id,
-          invoiceIds: invoice.map((i) => i.id),
+
+        await step.run('extract-invoice', async () => {
+          if (classifiedDocument.type !== 'invoice') {
+            return;
+          }
+          const service = new DocumentProcessingService();
+          const data = await service.processInvoice(document.id);
+          return data;
         });
-      })
+
+        await step.run('finish-document-processing', async () => {
+          const service = new DocumentProcessingService();
+          await service.updateDocumentProcessingStatus(
+            document.id,
+            'completed'
+          );
+        });
+      }
     );
 
     await Promise.all(uploadSteps);
+
+    await step.run('update-email-status', async () => {
+      const service = new InboundEmailService();
+      await service.updateStatus(emailId, organizationId, 'processed');
+    });
   }
 );

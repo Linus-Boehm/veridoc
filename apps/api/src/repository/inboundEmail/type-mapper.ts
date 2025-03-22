@@ -3,9 +3,11 @@ import type {
   inboundEmails,
   postboxes,
 } from '@repo/database/schema';
+import type { InsertInboundEmail } from '@repo/database/types';
 import { Document } from '@taxel/domain/src/document';
 import { InboundEmail } from '@taxel/domain/src/inboundEmail';
 import { Postbox } from '@taxel/domain/src/postbox';
+import { removeTimestamps } from '../type-mappers';
 
 type InboundEmailWithRelations = typeof inboundEmails.$inferSelect & {
   documents?: (typeof documents.$inferSelect)[];
@@ -69,7 +71,7 @@ export function mapInboundEmailToDomain(
       subject: props.subject,
       bodyText: props.bodyText,
       bodyHtml: props.bodyHtml,
-      date: props.date,
+      date: props.date.toISOString(),
       messageId: props.messageId,
       cc: props.cc,
       bcc: props.bcc,
@@ -84,4 +86,25 @@ export function mapInboundEmailToDomain(
     documentEntities,
     postboxEntity
   );
+}
+
+export function mapInboundEmailToDb(
+  inboundEmail: InboundEmail
+): InsertInboundEmail {
+  const data = removeTimestamps(inboundEmail);
+  const { createdAt, updatedAt, archivedAt } = inboundEmail.getTimestamps();
+
+  // Ensure bodyText and bodyHtml are always non-null strings
+  // This is required because inboundEmail.toJSON() may exclude these fields
+  // when withDetails=false, but the database schema requires them to be NOT NULL
+  // Access directly from the full entity JSON with withDetails=true
+  const fullData = inboundEmail.toJSON(true);
+
+  return {
+    ...data,
+    bodyText: data.bodyText ?? fullData.bodyText ?? '',
+    bodyHtml: data.bodyHtml ?? fullData.bodyHtml ?? '',
+    date: new Date(data.date),
+    archivedAt,
+  };
 }

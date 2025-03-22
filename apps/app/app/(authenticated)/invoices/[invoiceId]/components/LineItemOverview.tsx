@@ -1,8 +1,7 @@
 'use client';
 import { DataGridProvider } from '@repo/design-system/components/datagrid/DataGridProvider';
 import { createColumn } from '@repo/design-system/components/datagrid/columnHelpers';
-import type { ColDef } from '@repo/design-system/components/datagrid/columns';
-import type { InvoiceItemDTO } from '@taxel/domain/src/invoice';
+import type { InvoiceDTO, InvoiceItemDTO } from '@taxel/domain/src/invoice';
 import type { FC } from 'react';
 import { useMemo } from 'react';
 import { LineItemTable } from './LineItemTable';
@@ -12,7 +11,7 @@ export interface LineItemOverviewProps {
 }
 
 export const LineItemOverview: FC<LineItemOverviewProps> = ({ invoice }) => {
-  const coldDefs = useMemo((): ColDef<InvoiceItemDTO>[] => {
+  const coldDefs = useMemo(() => {
     return [
       createColumn<InvoiceItemDTO, string>({
         colId: 'position',

@@ -18,7 +18,7 @@ const router = new Hono()
   .use(
     cors({
       origin: ['*', 'http://localhost:3000', 'http://localhost:3002'],
-      allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+      allowMethods: ['GET', 'POST', 'PUT', 'PATCH', 'HEAD', 'DELETE', 'OPTIONS'],
       allowHeaders: ['Content-Type', 'Authorization', 'Sec-Ch-*'],
       credentials: true,
       maxAge: 600,

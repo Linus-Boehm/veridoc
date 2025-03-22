@@ -132,8 +132,7 @@ export const mapInvoiceItemToDomain = (
               : 0,
             value: dateValue || '',
           }
-        : undefined,
-        emailId: invoiceItem.emailId,
+        : undefined
     },
     id,
     mapTimestampsToDomain(invoiceItem)

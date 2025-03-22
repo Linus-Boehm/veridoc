@@ -9,8 +9,8 @@ import {
   useMemo,
   useRef,
 } from 'react';
-import { AllCommunityModule, ModuleRegistry } from 'ag-grid-community';
-import type { ColDef } from './columns';
+import { AllCommunityModule, ModuleRegistry, type ColDef } from 'ag-grid-community';
+
 
 // Register all Community features
 ModuleRegistry.registerModules([AllCommunityModule]);

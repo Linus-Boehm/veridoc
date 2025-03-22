@@ -4,6 +4,7 @@ import type { EmailStatus } from '@taxel/domain/src/inboundEmail';
 
 export interface EmailStatusProps {
   status?: EmailStatus;
+  isLoading?: boolean;
 }
 
 const statusMap: Record<EmailStatus, ColorVariants> = {
@@ -22,6 +23,6 @@ const statusLabelMap: Record<EmailStatus, string> = {
   archived: 'Archiviert',
 };
 
-export const EmailStatusBadge: FC<EmailStatusProps> = ({ status }) => {
-  return <StatusBadge color={status ? statusMap[status] : 'neutral'}>{status ? statusLabelMap[status] : '-'}</StatusBadge>;
+export const EmailStatusBadge: FC<EmailStatusProps> = ({ status, isLoading }) => {
+  return <StatusBadge color={status ? statusMap[status] : 'neutral'} isLoading={isLoading}>{status ? statusLabelMap[status] : '-'}</StatusBadge>;
 };

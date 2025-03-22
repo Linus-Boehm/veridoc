@@ -236,7 +236,14 @@ export const emailStatus = pgEnum('email_status', [
 
 export const documentTypes = pgEnum('document_types', [
   'invoice',
-  'receipt',
+  'payment_confirmation',
+  'reminder',
+  'contract',
+  'order',
+  'order_confirmation',
+  'internal_communication',
+  'advertising_newsletter',
+  'other',
   'unknown',
 ]);
 
@@ -267,6 +274,11 @@ export const documents = pgTable(
   ]
 );
 
+export const documentExtractionModel = pgEnum('document_extraction_model', [
+  'invoice',
+  'generic',
+]);
+
 export const documentExtractions = pgTable(
   'document_extractions',
   {
@@ -276,6 +288,7 @@ export const documentExtractions = pgTable(
     documentId: uuid()
       .references(() => documents.id, { onDelete: 'cascade' })
       .notNull(),
+    extractionModel: documentExtractionModel().notNull().default('generic'),
     organizationId: uuid()
       .references(() => organizations.id, { onDelete: 'cascade' })
       .notNull(),
@@ -287,7 +300,6 @@ export const documentExtractions = pgTable(
       columns: [t.organizationId, t.documentId],
       foreignColumns: [documents.organizationId, documents.id],
     }),
-    unique().on(t.organizationId, t.documentId),
   ]
 );
 

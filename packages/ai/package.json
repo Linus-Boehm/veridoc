@@ -2,6 +2,7 @@
   "name": "@repo/ai",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
@@ -10,9 +11,10 @@
     "@ai-sdk/openai": "^1.1.9",
     "@azure-rest/ai-document-intelligence": "^1.0.0",
     "@azure/core-auth": "^1.9.0",
-    "@taxel/domain": "workspace:*",
     "@t3-oss/env-nextjs": "catalog:",
+    "@taxel/domain": "workspace:*",
     "ai": "^4.1.28",
+    "openai": "^4.88.0",
     "react": "catalog:",
     "react-markdown": "^9.0.3",
     "tailwind-merge": "^3.0.1",

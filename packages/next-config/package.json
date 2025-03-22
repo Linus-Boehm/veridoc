@@ -2,16 +2,17 @@
   "name": "@repo/next-config",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "clean": "git clean -xdf .cache .turbo dist node_modules",
     "typecheck": "tsc --noEmit --emitDeclarationOnly false"
   },
   "devDependencies": {
     "@repo/typescript-config": "workspace:*",
-    "next": "15.1.6"
+    "next": "catalog:"
   },
   "dependencies": {
-    "@next/bundle-analyzer": "^15.1.6",
+    "@next/bundle-analyzer": "catalog:",
     "@t3-oss/env-core": "catalog:",
     "@t3-oss/env-nextjs": "catalog:",
     "zod": "catalog:"

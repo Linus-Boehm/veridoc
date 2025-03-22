@@ -1,4 +1,7 @@
-import { inboundEmail } from "./webhooks";
-import { documentActionsExtract } from "./document";
+import {  documentActionsExtract } from './document';
+import { inboundEmail } from './webhooks';
 
-export const functions = [inboundEmail, documentActionsExtract];
+export const functions = [
+  inboundEmail,
+  documentActionsExtract
+];

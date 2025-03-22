@@ -1,12 +1,9 @@
-import { createOpenAI } from '@ai-sdk/openai';
+import "server-only";
+import OpenAI from 'openai';
 import { keys } from '../keys';
 
-const openai = createOpenAI({
-  apiKey: keys().OPENAI_API_KEY,
-  compatibility: 'strict',
+
+export const openaiClient = new OpenAI({
+  apiKey: keys().OPENAI_API_KEY
 });
 
-export const models = {
-  chat: openai('gpt-4o-mini'),
-  embeddings: openai('text-embedding-3-small'),
-};

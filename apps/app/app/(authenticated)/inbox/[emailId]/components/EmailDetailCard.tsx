@@ -12,7 +12,7 @@ import type { InboundEmailDTO } from '@taxel/domain/src/inboundEmail';
 import type { FC } from 'react';
 
 export interface EmailDetailCardProps {
-  email?: InboundEmailDTO;
+  email?: InboundEmailDTO | null;
   status: 'pending' | 'success' | 'error';
 }
 
@@ -73,11 +73,10 @@ export const EmailDetailCard: FC<EmailDetailCardProps> = ({
         <div className="flex flex-col gap-2">
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="email-status">Status</Label>
-            
-              <div>
-                <EmailStatusBadge status={email?.status} isLoading={isLoading}/>
-              </div>
-            
+
+            <div>
+              <EmailStatusBadge status={email?.status} isLoading={isLoading} />
+            </div>
           </div>
 
           <div className="flex flex-col space-y-1.5">

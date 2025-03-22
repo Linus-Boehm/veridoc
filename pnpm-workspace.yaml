@@ -25,7 +25,8 @@ catalog:
   "cmdk": ^1.0.4
 
   # next
-  next: 15.1.6
+  next: 15.2.2 # exact version, no carrot or tilde
+  "@next/bundle-analyzer": 15.2.3 # match exact next version
   typescript: 5.7.3
   tailwindcss: 3.4.17
   postcss: ^8.5.1

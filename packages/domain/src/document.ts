@@ -8,7 +8,18 @@ export const processingStatusSchema = z.enum([
   'failed',
 ]);
 
-export const documentTypesSchema = z.enum(['invoice', 'receipt', 'unknown']);
+export const documentTypesSchema = z.enum([
+  'invoice',
+  'payment_confirmation',
+  'reminder',
+  'contract',
+  'order',
+  'order_confirmation',
+  'internal_communication',
+  'advertising_newsletter',
+  'other',
+  'unknown',
+]);
 export type ProcessingStatus = z.infer<typeof processingStatusSchema>;
 export type DocumentType = z.infer<typeof documentTypesSchema>;
 

@@ -15,6 +15,13 @@
       "when": 1742310347366,
       "tag": "0001_vendor_number",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1742490792086,
+      "tag": "0002_document_type",
+      "breakpoints": true
     }
   ]
 }

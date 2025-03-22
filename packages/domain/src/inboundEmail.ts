@@ -22,7 +22,7 @@ export const inboundEmailSchema = z.object({
   subject: z.string(),
   bodyText: z.string().default(''),
   bodyHtml: z.string().default(''),
-  date: z.string(),
+  date: z.string().datetime(),
   messageId: z.string(),
   cc: z.string().default(''),
   bcc: z.string().default(''),

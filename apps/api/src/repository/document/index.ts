@@ -5,7 +5,7 @@ import type {
   InsertDocumentExtraction,
   SelectDocumentExtraction,
 } from '@repo/database/types';
-import type { Document, ProcessingStatus } from '@taxel/domain/src/document';
+import type { Document, ProcessingStatus, DocumentType } from '@taxel/domain/src/document';
 import { NotFoundError } from '@taxel/domain/src/errors/not-found';
 import { mapDocumentToDb, mapDocumentToDomain } from './type-mapper';
 
@@ -54,6 +54,18 @@ export class DocumentRepository {
     const document = await database
       .update(documents)
       .set({ processingStatus })
+      .where(eq(documents.id, documentId))
+      .returning();
+    if (!document) {
+      throw new NotFoundError(`Document with id ${documentId} not found`);
+    }
+    return mapDocumentToDomain(document[0]);
+  }
+
+  async updateType(documentId: string, type: DocumentType): Promise<Document> {
+    const document = await database
+      .update(documents)
+      .set({ type })
       .where(eq(documents.id, documentId))
       .returning();
     if (!document) {

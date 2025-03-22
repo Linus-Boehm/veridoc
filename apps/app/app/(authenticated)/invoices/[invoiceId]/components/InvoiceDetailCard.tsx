@@ -9,7 +9,7 @@ import {
 } from '@repo/design-system/components/ui/card';
 import { Label } from '@repo/design-system/components/ui/label';
 import { Skeleton } from '@repo/design-system/components/ui/skeleton';
-import { formatDateString } from '@repo/design-system/lib/utils';
+import { formatDate } from '@repo/design-system/lib/utils';
 import type { InvoiceDTO } from '@taxel/domain/src/invoice';
 import { useInboundEmail } from '@taxel/queries/src/inboundEmails';
 import type { FC } from 'react';
@@ -81,7 +81,7 @@ export const InvoiceDetailCard: FC<InvoiceDetailCardProps> = ({
           <div className="flex flex-col space-y-1.5">
             <Label htmlFor="invoice-badge">Rechnungsdatum</Label>
             <span className="text-gray-500 text-sm">
-              {formatDateString(invoice?.invoiceDate?.value)}
+              {formatDate(invoice?.invoiceDate?.value)}
             </span>
           </div>
           <div className="flex flex-col space-y-1.5">
