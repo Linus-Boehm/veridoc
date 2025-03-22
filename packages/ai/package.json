@@ -12,7 +12,7 @@
     "@azure/core-auth": "^1.9.0",
     "@taxel/domain": "workspace:*",
     "@t3-oss/env-nextjs": "catalog:",
-    "ai": "^4.1.28",
+    "ai": "^4.2.0",
     "react": "catalog:",
     "react-markdown": "^9.0.3",
     "tailwind-merge": "^3.0.1",
